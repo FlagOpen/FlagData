@@ -1,0 +1,62 @@
+basic:
+  # input file path
+  input: demo_input.jsonl
+  # save file path
+  output: demo_output.jsonl
+  # we support input of jsonl/plain text, if it's text lines, set it to false
+  is_jsonl: true
+  # key in the input file corresponding to the value to extract/clean
+  source_key: rawContent
+  # key in the output file for saving
+  result_key: cleanedContent
+  # num process to use
+  num_workers: 16
+  # we'll split the whole file into several batches for faster processing,
+  # which is a balance of process creation
+  batch_size: 3000
+
+extractors:
+  # save key refers to the json's key corresponding to the extracted value
+  # extract page title from given html content
+  TitleExtractor:
+    save_key: "pageTitle"
+  # extract publish time from given html content
+  TimeExtractor:
+    save_key: "pagePublishTime"
+  # extract page content from given html content, which will be cleaned by filters later.
+  # we use a text sparsity based algorithm to extract useful content 
+  # which is more suitable for informative websites such as news, reviews, articles and so on.
+  ContentExtractor:
+    save_key: "pageContent"
+
+filters: 
+  # convert traditional Chinese to simplified Chinese
+  SimplifiedFilter:
+    config_file: t2s.json
+
+  SymbolFilter:
+    # clean emojis
+    filter_emoji: true
+    # clean control chars while keeping \t and \n
+    filter_control: true
+  
+  TextCleaner:
+    # clean private info such as social media account, ID card, phone number ...
+    filter_personal: true
+    # clean urls
+    filter_url: true
+    # normalize \u3000 and other spaces to " " and deduplicate
+    filter_extraspace: true
+
+
+  TextIntegrityChecker:
+    # min length of non-space chars
+    min_length: 16
+    # if the length of content < min length: return ""
+    length_check: true
+    # truncate the sentence by punctuations indicating sentence end
+    do_end_clip: true
+    # check whether sentence end mark exists in the article
+    end_mark_check: true
+    # check sentence end mark in a more strict way
+    double_mark_check: true

@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang=zh-cmn-Hans><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"><link rel=icon href=/favicon.ico><title>智源标注平台-离线版</title><style>.first-loading-wrp {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 420px;
+      height: 100%
+    }
+
+    .first-loading-wrp>h1 {
+      font-size: 128px
+    }
+
+    .first-loading-wrp .loading-wrp {
+      padding: 98px;
+      display: flex;
+      justify-content: center;
+      align-items: center
+    }
+
+    .dot {
+      animation: antRotate 1.2s infinite linear;
+      transform: rotate(45deg);
+      position: relative;
+      display: inline-block;
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      box-sizing: border-box
+    }
+
+    .dot i {
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      display: block;
+      background-color: #1890ff;
+      border-radius: 100%;
+      transform: scale(.75);
+      transform-origin: 50% 50%;
+      opacity: .3;
+      animation: antSpinMove 1s infinite linear alternate
+    }
+
+    .dot i:nth-child(1) {
+      top: 0;
+      left: 0
+    }
+
+    .dot i:nth-child(2) {
+      top: 0;
+      right: 0;
+      -webkit-animation-delay: .4s;
+      animation-delay: .4s
+    }
+
+    .dot i:nth-child(3) {
+      right: 0;
+      bottom: 0;
+      -webkit-animation-delay: .8s;
+      animation-delay: .8s
+    }
+
+    .dot i:nth-child(4) {
+      bottom: 0;
+      left: 0;
+      -webkit-animation-delay: 1.2s;
+      animation-delay: 1.2s
+    }
+
+    @keyframes antRotate {
+      to {
+        -webkit-transform: rotate(405deg);
+        transform: rotate(405deg)
+      }
+    }
+
+    @-webkit-keyframes antRotate {
+      to {
+        -webkit-transform: rotate(405deg);
+        transform: rotate(405deg)
+      }
+    }
+
+    @keyframes antSpinMove {
+      to {
+        opacity: 1
+      }
+    }
+
+    @-webkit-keyframes antSpinMove {
+      to {
+        opacity: 1
+      }
+    }</style><link href=/css/user.03de3796.css rel=prefetch><link href=/js/fail.c92e81e0.js rel=prefetch><link href=/js/user.527f6f1e.js rel=prefetch><link href=/css/app.a8158bb5.css rel=preload as=style><link href=/css/chunk-vendors.9d50c827.css rel=preload as=style><link href=/js/app.28f0a0ad.js rel=preload as=script><link href=/js/chunk-vendors.40af414c.js rel=preload as=script><link href=/css/chunk-vendors.9d50c827.css rel=stylesheet><link href=/css/app.a8158bb5.css rel=stylesheet></head><body><noscript><strong>We're sorry but vue-antd-pro doesn't work properly without JavaScript enabled. Please enable it to continue.</strong><iframe src=*.html></iframe></noscript><div id=app><div class=first-loading-wrp><div class=loading-wrp><span class="dot dot-spin"><i></i><i></i><i></i><i></i></span></div><div style="display: flex; justify-content: center; align-items: center;">加载中...</div></div></div><script src=/js/chunk-vendors.40af414c.js></script><script src=/js/app.28f0a0ad.js></script></body><script>document.addEventListener('keydown', function(e){
+    e = window.event || e;
+    let keycode = e.keyCode || e.which; 
+    if (e.altKey && keycode == 65) {   //屏蔽Alt+A  
+      e.preventDefault();
+      window.event.returnValue = false;
+    }
+    if (e.altKey && e.ctrlKey && keycode == 65) {   //屏蔽Ctrl+Alt+A  
+      e.preventDefault();
+      window.event.returnValue = false;
+    }
+  });</script></html>

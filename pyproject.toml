@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flagdata"
+dynamic = ["version"]
+authors = [
+  { name="Xuezhi Fang", email="xzfang@baai.ac.cn" },
+  { name="Zhao Xue", email="xuezhao@baai.ac.cn" },
+  { name="Hanyu Zhao", email="hyzhao@baai.ac.cn" },
+  { name="Quanyue Ma", email="maqy@baai.ac.cn" },
+  { name="Jiahong Leng", email="jhleng@baai.ac.cn" },
+  { name="Zheng Zhang", email="zhangz.goal@gmail.com" },
+  { name="Yequan Wang", email="yqwang@baai.ac.cn" }
+]
+description = "An out-of-the-box toolkit for data processing."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+cleaner = [
+    "requests>=2.28.1",
+    "tqdm>=4.63.0",
+    "urlextract>=1.6.0",
+    "PyYAML>=6.0",
+    "opencc>=1.1.6; platform_system == 'Linux'",
+    "opencc-python-reimplemented>=0.1.6; platform_system == 'Darwin'",
+    "lxml>=4.9.1"
+]
+
+condensation = [
+    "tqdm>=4.63.0",
+    "PyYAML>=6.0",
+    "transformers>=4.20.1",
+    "loguru>=0.6.0",
+    "numpy>=1.21.5",
+    "pandas>=1.3.5"
+]
+
+analysis = [
+    "requests>=2.28.1",
+    "nltk>=3.7"
+]
+
+all = [
+    "requests>=2.28.1",
+    "tqdm>=4.63.0",
+    "PyYAML>=6.0",
+    "urlextract>=1.6.0",
+    "opencc>=1.1.6; platform_system == 'Linux'",
+    "opencc-python-reimplemented>=0.1.6; platform_system == 'Darwin'",
+    "lxml>=4.9.1",
+    "transformers>=4.20.1",
+    "loguru>=0.6.0",
+    "numpy>=1.21.5",
+    "pandas>=1.3.5",
+    "nltk>=3.7"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/cofe-ai/flagdata"
+"Bug Tracker" = "https://github.com/cofe-ai/flagdata/issues"
+
+[tool.hatch.version]
+path = "flagdata/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/flagdata",
+]
