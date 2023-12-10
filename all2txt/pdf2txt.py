@@ -1,92 +1,60 @@
-from unstructured.partition.auto import partition
-
-#
-# #
-# # elements = partition(filename="/Users/wuchengwei/Documents/privateText/人大/LLMQA/lunwen/LLMQA/2004.04906.pdf")
-# # print("\n\n".join([str(el) for el in elements]))
-#
-#
-# from unstructured.partition.pdf import partition_pdf
-#
-# # Returns a List[Element] present in the pages of the parsed pdf document
-# # elements = partition_pdf("/Users/wuchengwei/Documents/privateText/人大/LLMQA/lunwen/LLMQA/2004.04906.pdf")
-# # print(elements)
-# # print("\n\n".join([str(el) for el in elements]))
-#
-#
-# # from unstructured.documents.elements import NarrativeText
-# # from unstructured.partition.text_type import sentence_count
-# #
-# # for element in elements[:100]:
-# #     if isinstance(element, NarrativeText) and sentence_count(element.text) > 2:
-# #         print(element)
-# #         print("\n")
-
-
 from unstructured.partition.pdf import partition_pdf
+import argparse
 
-#
-filename = "/Users/wuchengwei/Documents/privateText/人大/LLMQA/lunwen/LLMQA/2004.04906.pdf"
-#
-elements = partition_pdf(filename=filename, infer_table_structure=True, strategy="hi_res")
-# print(elements)
-# print("\n\n".join([str(el) for el in elements]))
 
-tables = [el for el in elements if el.category == "Table"]
-print("===tables===>" + str(tables))
-for table in tables:
-    print(table)
-    print(table.metadata.text_as_html)
-    # print(table[0].metadata.text_as_html)
-tables_FigureCaption = [el for el in elements if el.category == "FigureCaption"]
-tables_NarrativeText = [el for el in elements if el.category == "NarrativeText"]
-tables_ListItem = [el for el in elements if el.category == "ListItem"]
-tables_Title = [el for el in elements if el.category == "Title"]
-tables_Address = [el for el in elements if el.category == "Address"]
-tables_PageBreak = [el for el in elements if el.category == "PageBreak"]
-tables_Header = [el for el in elements if el.category == "Header"]
-tables_Footer = [el for el in elements if el.category == "Footer"]
-tables_UncategorizedText = [el for el in elements if el.category == "UncategorizedText"]
-tables_Image = [el for el in elements if el.category == "Image"]
-tables_Formula = [el for el in elements if el.category == "Formula"]
-print("===tables_FigureCaption===>" + str(tables_FigureCaption))
-for FigureCaption in tables_FigureCaption:
-    print(FigureCaption)
-print("===tables_NarrativeText===>" + str(tables_NarrativeText))
-for NarrativeText in tables_NarrativeText:
-    print(NarrativeText)
-print("===tables_ListItem===>" + str(tables_ListItem))
-for ListItem in tables_ListItem:
-    print(ListItem)
-print("===tables_Title===>" + str(tables_Title))
-for Title in tables_Title:
-    print(Title)
-print("===tables_Address===>" + str(tables_Address))
-for Address in tables_Address:
-    print(Address)
-print("===tables_PageBreak===>" + str(tables_PageBreak))
-for PageBreak in tables_PageBreak:
-    print(PageBreak)
-print("===tables_Header===>" + str(tables_Header))
-for Header in tables_Header:
-    print(Header)
-print("===tables_Footer===>" + str(tables_Footer))
-for Footer in tables_Footer:
-    print(Footer)
-print("===tables_UncategorizedText===>" + str(tables_UncategorizedText))
-for UncategorizedText in tables_UncategorizedText:
-    print(UncategorizedText)
-print("===tables_Image===>" + str(tables_Image))
-for Image in tables_Image:
-    print(Image)
-print("===tables_Formula===>" + str(tables_Formula))
-for Formula in tables_Formula:
-    print(Formula)
-#
-# print(tables[0].text)
-# print(tables[0].metadata.text_as_html)
+def pdf2txt(input_path, process_all):
+    elements = partition_pdf(filename=input_path, infer_table_structure=True, strategy="hi_res")
+    all_file = None
 
-from unstructured.staging.base import elements_to_json, elements_from_json
+    if process_all:
+        # 创建一个空字典，用于存储不同类别的元素列表
+        tables = {}
 
-# filename = "/Users/wuchengwei/Downloads/code/zhiyuan/wuchengwei_FlagData/FlagData/output/outputs1.json"
-# elements_to_json(elements, filename=filename)
+        # 定义要筛选的类别列表
+        categories = [
+            "Table", "FigureCaption", "NarrativeText", "ListItem", "Title", "Address",
+            "PageBreak", "Header", "Footer", "UncategorizedText", "Image", "Formula"
+        ]
+
+        # 遍历每个类别，筛选出对应类别的元素并存储到字典中
+        for category in categories:
+            # 检查是否为 "Table" 类别，需要分别处理 "table.metadata.text_as_html"
+            if category == "Table":
+                tables[category] = [el for el in elements if el.category == category]
+                # 另外存储 "table.metadata.text_as_html"
+                tables["Table_text_as_html"] = [el.table.metadata.text_as_html for el in elements if
+                                                el.category == category]
+            else:
+                # 对于其他类别，直接存储筛选的元素
+                tables[category] = [el for el in elements if el.category == category]
+        all_file = tables
+    else:
+        print(elements)
+        all_file = "\n\n".join([str(el) for el in elements])
+
+    return all_file
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="pdf2txt")
+    parser.add_argument("--input", "-i", type=str, required=True, help="input Catalogue path")
+    parser.add_argument("--output", "-o", type=str, required=True, help="Output directory")
+
+    # 修改 --all 参数为布尔类型，并更改变量名以避免与内置函数冲突
+    parser.add_argument("--process_all", action="store_true",
+                        help="process all articles if specified, otherwise split by category list, default is all")
+
+    args = parser.parse_args()
+    result = pdf2txt(args.input, args.process_all)
+
+    # 将结果保存到文件
+    output_file_path = args.output  # 指定输出文件路径，可以根据实际需求修改
+    with open(output_file_path, 'w', encoding='utf-8') as output_file:
+        if isinstance(result, dict):
+            # 如果结果是字典类型，将字典内容写入文件
+            for key, value in result.items():
+                output_file.write(f"Category: {key}\n")
+                output_file.write(f"{value}\n\n")
+        else:
+            # 如果结果不是字典，直接写入文件
+            output_file.write(result)
