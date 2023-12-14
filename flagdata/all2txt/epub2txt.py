@@ -1,0 +1,61 @@
+import argparse
+from unstructured.partition.epub import partition_epub
+
+filename = "/Users/wuchengwei/Desktop/职场开挂必读：高效人士手册（全5册）-职场开挂必读：高效人士手册（全5册）.epub"
+
+
+def epub2txt(input_path, process_all):
+    elements = partition_epub(filename=input_path)
+    all_file = None
+
+    if process_all:
+        # Create an empty dictionary to store lists of elements in different categories
+        tables = {}
+
+        # Define the list of categories to filter
+        categories = [
+            "Table", "FigureCaption", "NarrativeText", "ListItem", "Title", "Address",
+            "PageBreak", "Header", "Footer", "UncategorizedText", "Image", "Formula"
+        ]
+
+        # Traverse each category, filter out the elements of the corresponding category and store them in the dictionary
+        for category in categories:
+            # Check whether it is in the category of "Table". You need to deal with "table.metadata.text_as_html" separately.
+            if category == "Table":
+                tables[category] = [el for el in elements if el.category == category]
+                # Additional storage "table.metadata.text_as_html"
+                tables["Table_text_as_html"] = [el.metadata.text_as_html for el in elements if el.category == category]
+            else:
+                # For other categories, filter elements are stored directly
+                tables[category] = [el for el in elements if el.category == category]
+        all_file = tables
+    else:
+        print(elements)
+        all_file = "\n\n".join([str(el) for el in elements])
+
+    return all_file
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="epub2txt")
+    parser.add_argument("--input", "-i", type=str, required=True, help="input Catalogue path")
+    parser.add_argument("--output", "-o", type=str, required=True, help="Output directory")
+
+    # Modify-- the all parameter is of Boolean type and change the measure name to avoid conflicts with the built-in function
+    parser.add_argument("--process_all", action="store_true",
+                        help="process all articles if specified, otherwise split by category list, default is all articles")
+
+    args = parser.parse_args()
+    result = epub2txt(args.input, args.process_all)
+
+    # Save the results to a file
+    output_file_path = args.output  # Specify the output file path, which can be modified according to actual needs
+    with open(output_file_path, 'w', encoding='utf-8') as output_file:
+        if isinstance(result, dict):
+            # If the result is a dictionary type, write the contents of the dictionary to the file
+            for key, value in result.items():
+                output_file.write(f"Category: {key}\n")
+                output_file.write(f"{value}\n\n")
+        else:
+            # If the result is not a dictionary, write directly to the file
+            output_file.write(result)
