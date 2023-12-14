@@ -1,3 +1,7 @@
+pipeline流程为：
+![pipeline](pipeline.png)
+
+
 <div id=top align="center">
 
 ![FlagData](flagdata_logo.png)
