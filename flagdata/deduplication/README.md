@@ -1,4 +1,5 @@
 下面详细描述了如何使用分布式能力来进行数据去重
+
 一、Spark standalone集群（1台master2台worker）搭建
 1. 安装jdk
 1. 下载jdk包
