@@ -111,7 +111,7 @@ If the installation is successful, you can see the version number of the install
 After installation, you can use Miniconda to manage your Python environment and install various packages and dependencies.
 ```
 
-e. 配置Spark-defaults.conf
+e. Configure Spark-defaults.conf
 
    i. cp spark-defaults.conf.template spark-defaults.conf
 
