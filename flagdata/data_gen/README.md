@@ -1,11 +1,9 @@
-### 基于OpenAI接口的数据增强模块
+### Data enhancement module based on OpenAI interface
 
-利用OpenAI接口，以三种不同策略，构建一系列针对不同能力的单轮SFT数据。策略包括：
+The OpenAI interface is utilized to construct a series of single rounds of SFT data for different abilities with three different strategies. The strategies include:
 
-+ ImitateGenerator：以若干案例样本为模板，扩增数据。支持同时生成多种语言数据。
-+ AbilityExtractionGenerator: 利用OpenAI接口，归纳出若干案例样本中包含的能力。根据这个能力集合，生成新样本和答案。
-+ AbilityDirectGenerator: 根据指定的能力类型，或者任务类型，直接生成与该能力或任务相关的新样本。例如，指定能力为“逻辑推理”，则可生成一系列逻辑推理题目及答案。为增强生成样本的多样性，支持排除已生成样本。
-
-具体示例见`example.py`
-
- 
++ ImitateGenerator: augment data using several case samples as templates. Supports simultaneous generation of data in multiple languages.
++ AbilityExtractionGenerator: using the OpenAI interface, generalize the abilities contained in several case samples. Generate new samples and answers based on this collection of capabilities.
++ AbilityDirectGenerator: Generate new samples directly related to a specified ability type or task type. For example, if you specify the ability as "Logical Reasoning", you can generate a series of logical reasoning questions and answers. In order to increase the diversity of generated samples, it is supported to exclude already generated samples.
+  
+  See `example.py` for an example.

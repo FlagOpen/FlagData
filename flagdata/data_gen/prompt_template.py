@@ -1,3 +1,7 @@
+# Copyright © 2023 BAAI. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License")
+
 
 ability_extraction_prompt = "现在有一系列样本，例如：{sample_str} \n \
     请读题，并列举出这些题目需要运用哪些能力才能完成。\

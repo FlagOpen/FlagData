@@ -1,3 +1,16 @@
+"""
+@article{
+kocetkov2023the,
+title={The Stack: 3 {TB} of permissively licensed source code},
+author={Denis Kocetkov and Raymond Li and Loubna Ben allal and Jia LI and Chenghao Mou and Yacine Jernite and Margaret Mitchell and Carlos Mu{\~n}oz Ferrandis and Sean Hughes and Thomas Wolf and Dzmitry Bahdanau and Leandro Von Werra and Harm de Vries},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2023},
+url={https://openreview.net/forum?id=pxpbTdUEpD},
+note={}
+}
+"""
+
 import hashlib
 import re
 import struct
@@ -118,12 +131,6 @@ def sha1_hash32(data):
     30
     """
     return struct.unpack("<I", hashlib.sha1(data).digest()[:4])[0]
-
-
-"""
---threshold 参数生效第1步：
-使用`generate_hash_values()`函数为给定文档生成MinHashLSH值。这些值用于衡量文档之间的相似性。
-"""
 
 
 def generate_hash_values(
@@ -344,7 +351,7 @@ if __name__ == "__main__":  # pragma: no cover
     conf.set("spark.sql.shuffle.partitions", "600")
     # conf.set("spark.sql.shuffle.partitions", "200")
     conf.set("spark.sql.broadcastTimeout", "600")
-    conf.set("spark.sql.autoBroadcastJoinThreshold", "-1")  # 表示禁用
+    conf.set("spark.sql.autoBroadcastJoinThreshold", "-1")
     conf.set("spark.dynamicAllocation.enabled", "true")
     conf.set("spark.sql.adaptive.enabled", "true")
     conf.set("spark.sql.adaptive.skewJoin.enabled", "true")
@@ -359,8 +366,8 @@ if __name__ == "__main__":  # pragma: no cover
     conf.set("spark.executor.cores", "100")
     conf.set("spark.shuffle.service.enabled", "false")
     # conf.set("spark.cores.max", 960)
-    conf.set("spark.history.fs.logDirectory", "file:///cwwu/test_spark_data/spark_events")
-    conf.set("spark.eventLog.dir", "file:///cwwu/test_spark_data/spark_events")
+    conf.set("spark.history.fs.logDirectory", "file://your_path")
+    conf.set("spark.eventLog.dir", "file://your_path")
     conf.set("spark.executor.allowSparkContext", "true")
     conf.set("spark.driver.maxResultSize", "5120m")
     spark = SparkSession.builder.config(conf=conf).getOrCreate()
@@ -387,8 +394,7 @@ if __name__ == "__main__":  # pragma: no cover
     ).T
 
     # init tokenizer
-    tokenizer = AutoTokenizer.from_pretrained("/cwwu/models/BAAI_AquilaChat-7B")
-    # todo 可优化
+    tokenizer = AutoTokenizer.from_pretrained("models/BAAI_AquilaChat-7B")
     bc_tokenizer = spark.sparkContext.broadcast(tokenizer)
     tokenize_udf = F.udf(bc_tokenize, returnType=ArrayType(IntegerType()))
 
@@ -423,7 +429,6 @@ if __name__ == "__main__":  # pragma: no cover
     # assert (args.deduplicate and args.tokenize) or not args.deduplicate, "dedup requires tokenization applied"
     # filter out empty rows
     df = df.filter(f'{args.column} != ""')
-    # todo:删除input_ids字段
     if args.tokenize:
         df = df.withColumn("input_ids", tokenize_udf(F.col(args.column)))
     # df.show() # debug only

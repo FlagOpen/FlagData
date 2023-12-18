@@ -1,3 +1,7 @@
+# Copyright © 2023 BAAI. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License")
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, array
 from pyspark.sql.types import ArrayType, StringType

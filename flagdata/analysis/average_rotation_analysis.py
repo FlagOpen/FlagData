@@ -1,3 +1,7 @@
+# Copyright © 2023 BAAI. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License")
+
 import jsonlines
 
 file_path = './data/average_rounds_data.jsonl'  # JSONL文件路径

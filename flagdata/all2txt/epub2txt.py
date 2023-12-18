@@ -1,7 +1,10 @@
+# Copyright © 2023 BAAI. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License")
+
+
 import argparse
 from unstructured.partition.epub import partition_epub
-
-filename = "/Users/wuchengwei/Desktop/职场开挂必读：高效人士手册（全5册）-职场开挂必读：高效人士手册（全5册）.epub"
 
 
 def epub2txt(input_path, process_all):

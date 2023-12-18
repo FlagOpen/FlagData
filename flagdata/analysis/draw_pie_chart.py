@@ -1,3 +1,7 @@
+# Copyright © 2023 BAAI. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License")
+
 import matplotlib.pyplot as plt
 
 # 给定的数据列表

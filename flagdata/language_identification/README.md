@@ -1,0 +1,4 @@
+LID stands for Language identification, which is a model for language identification.
+It uses fastText's language classifier, which is trained on Wikipedia, Tatoeba, and SETimes, uses n-grams as features, and uses a hierarchical softmax. 176 languages are classified, and it outputs a score from 0 to 1.
+Each CPU core can process one thousand documents per second.
+For each web page, the language classification is done once, and the classification score is obtained. If it is greater than 0.5, then the page is classified as a specific language, otherwise, the page is not sure what language it is in and the page is discarded.
