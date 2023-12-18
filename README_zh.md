@@ -95,9 +95,9 @@ pip install -r requirements.txt
 
 ### 2、数据准备阶段
 
-all2txt模块下，将pdf2txt、epub2txt等非结构化/半结构化的文件转成txt，并且可以很好的解决单栏、双栏，以及图表穿插中文本的顺序等导致问题文本内容不连贯的问题。
+&emsp;&emsp;all2txt模块下，将pdf2txt、epub2txt等非结构化/半结构化的文件转成txt，并且可以很好的解决单栏、双栏，以及图表穿插中文本的顺序等导致问题文本内容不连贯的问题。
 
-同时解析后的元素种类有"Table（表格）", "FigureCaption（图片标题）", "NarrativeText【正文】", "ListItem【参考文献】", "
+&emsp;&emsp;同时解析后的元素种类有"Table（表格）", "FigureCaption（图片标题）", "NarrativeText【正文】", "ListItem【参考文献】", "
 Title【章节标题】", "Address【邮箱地址】","PageBreak", "Header【页眉】", "Footer【页脚】", "UncategorizedText【arxiv竖排编号】", "
 Image(图)", "Formula（公式）" 等，工具脚本提供保留全文，以及按照类别解析保存两种形式。
 
@@ -107,7 +107,7 @@ Image(图)", "Formula（公式）" 等，工具脚本提供保留全文，以及
 
 #### 3.1 语言识别
 
-language_identification模块下，使用 fastText 的语言分类器来做分类，fastText 的语言分类器是在 Wikipedia、Tatoeba、SETimes
+&emsp;&emsp;language_identification模块下，使用 fastText 的语言分类器来做分类，fastText 的语言分类器是在 Wikipedia、Tatoeba、SETimes
 上面训练的，使用了 n-grams 来作为特征，使用了层级的 softmax。支持 176 种语言的分类，并且最后会输出一个 0~1 的分数。
 
 + 每个 CPU 核心上，每秒可以处理一千个文档。
@@ -116,9 +116,9 @@ language_identification模块下，使用 fastText 的语言分类器来做分�
 
 #### 3.2 数据清洗
 
-cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理数据。使用 SharedMemoryManager 创建可共享的数据结构，在数据处理中多进程共享数据。
+&emsp;&emsp;cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理数据。使用 SharedMemoryManager 创建可共享的数据结构，在数据处理中多进程共享数据。
 
-通过多进程和共享内存的方式实现了高效的数据清洗：
+&emsp;&emsp;通过多进程和共享内存的方式实现了高效的数据清洗：
 
 目前包含如下清洗规则：
 
@@ -131,9 +131,7 @@ cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理�
 
 使用FlagData的数据清洗功能仅需两步：
 
-1.
-
-修改YAML配置文件中的数据路径与格式。我们在配置文件模板中为每个参数给出了详细的注释来解释其含义。同时你也可以参考[配置](#配置)
+1.修改YAML配置文件中的数据路径与格式。我们在配置文件模板中为每个参数给出了详细的注释来解释其含义。同时你也可以参考[配置](#配置)
 章节。
 
 2. 在以下代码中指定配置文件路径，运行即可
@@ -159,9 +157,9 @@ cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理�
 
 #### 3.4 数据去重
 
-deduplication模块下，提供海量文本数据去重能力，该阶段使用的是MinHashLSH（最小哈希局部敏感哈希）通过将文本转换为一系列哈希值，以便比较文本之间的相似性。
+&emsp;&emsp;deduplication模块下，提供海量文本数据去重能力，该阶段使用的是MinHashLSH（最小哈希局部敏感哈希）通过将文本转换为一系列哈希值，以便比较文本之间的相似性。
 
-我们可以通过控制参数threshold，它代表了相似性的阈值，threshold值的范围是从0到1。设置为1时意味着完全匹配，任何文本都不会被过滤掉。相反，如果设置了较低的threshold值，相似性稍微高一些的文本也会被保留，我们可以根据需要设置更高的threshold值，以便只保留那些非常相似的文本，而丢弃那些相似性稍微低一些的文本，经验默认值为0.87；同时我们利用了Spark的分布式计算能力处理大规模数据，使用了MapReduce思想来实现去重，同时经spark调优，来高效地处理大规模文本数据集。
+&emsp;&emsp;我们可以通过控制参数threshold，它代表了相似性的阈值，threshold值的范围是从0到1。设置为1时意味着完全匹配，任何文本都不会被过滤掉。相反，如果设置了较低的threshold值，相似性稍微高一些的文本也会被保留，我们可以根据需要设置更高的threshold值，以便只保留那些非常相似的文本，而丢弃那些相似性稍微低一些的文本，经验默认值为0.87；同时我们利用了Spark的分布式计算能力处理大规模数据，使用了MapReduce思想来实现去重，同时经spark调优，来高效地处理大规模文本数据集。
 如下是在数据去重过程中迭代计算的相似文本，该文本在换行、编辑姓名等方面有细微区别，但是去重算法可以识别出两段文本高度相似。
 
 ```json lines
@@ -196,9 +194,13 @@ Spark 的原生算子来进行处理。
 
 analysis数据分析模块提供如下功能：
 （1）文本的平均轮次分析代码，计算平均轮次（以换行符为例）
+
 （2）文本的领域分布
+
 （3）文本的语言分布
+
 （4）文本的长度分析
+
 
 具体详细示例见[analysis模块下的readMe](flagdata/analysis/README_zh.md)
 
