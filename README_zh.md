@@ -37,10 +37,14 @@ FlagData支持以下特性：
 
 - [安装](#安装)
 - [快速上手](#快速上手)
-    - [数据清洗](#数据清洗)
-    - [数据分析](#数据分析)
-    - [数据蒸馏](#数据压缩)
-    - [数据标注](#数据标注)
+    - [1、数据来源阶段](#1、数据来源阶段)
+    - [2、数据准备阶段](#2、数据准备阶段)
+    - [3、数据预处理阶段](#3、数据预处理阶段)
+      - [3.1 语言识别](#3.1 语言识别)
+      - [3.2 数据清洗](#3.2 数据清洗)
+      - [3.3 质量评估](#3.3 质量评估)
+      - [3.4 数据去重](#3.4 数据去重)
+    - [4、数据分析](#4、数据分析)
 - [配置](#配置)
 - [使用指南](#使用指南)
 - [联系我们](#联系我们)
@@ -138,30 +142,52 @@ deduplication模块下，提供海量文本数据去重能力，该阶段使用�
 
 我们可以通过控制参数threshold，它代表了相似性的阈值，threshold值的范围是从0到1。设置为1时意味着完全匹配，任何文本都不会被过滤掉。相反，如果设置了较低的threshold值，相似性稍微高一些的文本也会被保留，我们可以根据需要设置更高的threshold值，以便只保留那些非常相似的文本，而丢弃那些相似性稍微低一些的文本，经验默认值为0.87；同时我们利用了Spark的分布式计算能力处理大规模数据，使用了MapReduce思想来实现去重，同时经spark调优，来高效地处理大规模文本数据集。
 如下是在数据去重过程中迭代计算的相似文本，该文本在换行、编辑姓名等方面有细微区别，但是去重算法可以识别出两段文本高度相似。
+如下是在去重迭代过程中的相似文本示例（责任编辑不一致）
 
-![dedup](dedup.png)
-### 数据分析
-使用FlagData的数据分析功能最便捷的方式是利用我们提供的客户端请求CoreNLP官方的服务，示例代码如下：
-
-```python
-from flagdata.analysis.text_analyzer import CoreNLPAnalyzer
-# 创建客户端以调用官方的demo服务
-analyzer = CoreNLPAnalyzer(url="https://corenlp.run", lang="en")
-data = "FlagData is a fast and extensible toolkit for data processing provided by BAAI. Enjoy yourself! "
-tokenized_text = analyzer.tokenize(data)
-print(tokenized_text)
-# [['FlagData', 'is', 'a', 'fast', 'and', 'extensible', 'toolkit', 'for', 'data', 'processing', 'provided', 'by', 'BAAI', '.'], ['Enjoy', 'yourself', '!']]
-pos_tags = analyzer.pos_tag(data)
-print(pos_tags)
-# [['NNP', 'VBZ', 'DT', 'JJ', 'CC', 'JJ', 'NN', 'IN', 'NN', 'NN', 'VBN', 'IN', 'NN', '.'], ['VB', 'PRP', '.']]
-ners = analyzer.ner(data)
-print(ners)
-# [[{('BAAI', (74, 78)): 'ORGANIZATION'}], []]
-analyzer.close()
+```json lines
+{
+  "__id__":1881195681200,
+  "content":"新华社北京1月11日电 中共全国人大常委会党组10日举行会议,学习习近平总书记在二十届中央纪"
+  委二次全会上的重要讲话和全会精神,结合人大工作实际,研究部署贯彻落实工作。全国人大常委会委员长、党组书
+  记栗战书主持会议并讲话......全国人大常委会党组副书记王晨,全国人大常委会党组成员张春贤、沈跃跃、吉炳
+  轩、艾力更·依明巴海、王东明、白玛赤林、杨振武出席会议并发言。 (责任编辑:符仲明)"
+}
+{
+  "__id__":944892809591,
+  "content":"新华社北京1月11日电 中共全国人大常委会党组10日举行会议,学习习近平总书记在二十届中央纪
+  委二次全会上的重要讲话和全会精神,结合人大工作实际,研究部署贯彻落实工作。全国人大常委会委员长、党组书
+  记栗战书主持会议并讲话......全国人大常委会党组副书记王晨,全国人大常委会党组成员张春贤、沈跃跃、吉炳
+  轩、艾力更·依明巴海、王东明、白玛赤林、杨振武出席会议并发言。\n【纠错】\n【责任编辑:周楚卿\n】"
+}
 ```
+spark单一能力的集成：
+
+&emsp;&emsp;很多时候，我们想使用spark的分布式处理数据能力，这里提供了一个普通函数改造成spark udf函数，进而使用spark能力的方法
+
+&emsp;&emsp;但是对于想要改造成spark任务的函数需要满足：
+
+1. 数据并行性：函数的输入数据可以划分为多个部分并进行并行处理。
+2. 可序列化和不可变性：Spark中的函数必须是可序列化的，以便在不同节点上传输。
+3. 不依赖于特定计算节点：函数的执行不依赖于特定节点的计算资源或数据存储位置，以便能够在集群中的任何节点上执行。
+4. 无状态或可共享状态：函数不依赖于外部状态或只依赖于可共享的状态。这样可以确保在不同计算节点上并行执行函数时不会发生冲突或竞争条件。
+
+&emsp;&emsp;在使用 UDF 时，应该考虑性能和优化。有些函数可能在本地 Python 环境中运行良好，但在分布式 Spark 环境中可能效率不高。 对于复杂的逻辑或需要大量内存的函数，可能需要进一步的优化和考虑。UDF 是为了简单的逻辑和数据处理而设计的，对于更复杂的计算，可能需要使用 Spark 的原生算子来进行处理。
+
+如果用户只是单单将python函数改成spark任务，如果没有spark集群是不行的。这里详细的写了傻瓜式搭建集群的文档，方便小白用户使用。具体示例见[spark集群搭建](flagdata/deduplication/README_zh.md)
+
+
+### 4、数据分析
+analysis数据分析模块提供如下功能：
+（1）文本的平均轮次分析代码，计算平均轮次（以换行符为例）
+（2）文本的领域分布
+（3）文本的语言分布
+（4）文本的长度分析
+
+具体详细示例见[analysis模块下的readMe](flagdata/analysis/README_zh.md) 
+
 
 ## 配置
-针对`数据清洗`、`数据质量评估`模块， 我们提供了配置文件模板：[cleaner_config.yaml](https://dorc.baai.ac.cn/resources/projects/FlagData/cleaner_config.yaml)， [distillation_config.yaml](https://dorc.baai.ac.cn/resources/projects/FlagData/distillation_config.yaml)。 配置文件为易读的 [YAML](https://yaml.org) 格式，并提供了详尽的注释。使用这些模块前请确认已经在配置文件中修改好相应参数。
+针对`数据清洗`、`数据质量评估`模块， 我们提供了配置文件模板：[cleaner_config.yaml](https://dorc.baai.ac.cn/resources/projects/FlagData/cleaner_config.yaml)， [bert_config.yaml](flagdata/quality_assessment/Bert/bert_config.yaml)。 配置文件为易读的 [YAML](https://yaml.org) 格式，并提供了详尽的注释。使用这些模块前请确认已经在配置文件中修改好相应参数。
 
 以下是一些你需要注意的重要参数：
 
@@ -172,6 +198,16 @@ analyzer.close()
    input: ./demo/demo_input.jsonl
    # 清洗后数据的保存路径
    output: ./demo/output.jsonl
+   ```
+
+### 数据质量评估
+
+   ```yaml
+   # 数据评估模型可以从[ChineseWebText下载](https://github.com/CASIA-LM/ChineseWebText)
+   pretrained_model_path: "models/bert-base-chinese"
+   checkpoint: "models/pretrain/2023-08-16-21-36/model-epoch_19-step_2999.pt"
+   # text_key 字段为被评估的字段
+   text_key: "raw_content"
    ```
 
 ## 使用指南
@@ -188,6 +224,10 @@ analyzer.close()
 [text-data-distillation](https://github.com/arumaekawa/text-dataset-distillation),
 [emoji](https://github.com/carpedm20/emoji),
 [transformers](https://github.com/huggingface/transformers)。
+[ChineseWebText](https://github.com/CASIA-LM/ChineseWebText)
+[lid](https://github.com/facebookresearch/cc_net)
+[unstructured](https://github.com/Unstructured-IO/unstructured)
+[minHash](https://github.com/ChenghaoMou/text-dedup)
 
 ## 许可证
 FlagData项目基于 [Apache 2.0 协议](LICENSE)。
