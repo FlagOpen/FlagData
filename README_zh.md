@@ -34,25 +34,21 @@ FlagData支持以下特性：
 --------------------------------------------------------------------------------
 
 
-<!-- vscode-markdown-toc -->
-
-* 1. [安装](#-1)
-* 2. [快速上手](#-1)
-    * 3.1. [1、数据来源阶段](#-1)
-    * 3.2. [2、数据准备阶段](#-1)
-    * 3.3. [3、数据预处理阶段](#-1)
-        * 3.3.1. [3.1 语言识别](#-1)
-        * 3.3.2. [3.2 数据清洗](#-1)
-        * 3.3.3. [3.3 质量评估](#-1)
-        * 3.3.4. [3.4 数据去重](#-1)
-    * 3.4. [4、数据分析](#-1)
-* 3. [配置](#-1)
-    * 4.1. [数据清洗](#-1)
-    * 4.2. [数据质量评估](#-1)
-* 4. [使用指南](#-1)
-* 5. [联系我们](#-1)
-* 6. [参考项目](#-1)
-* 7. [许可证](#-1)
+- [安装](#安装)
+- [快速上手](#快速上手)
+    - [数据来源阶段](#1数据来源阶段)
+    - [数据准备阶段](#2数据准备阶段)
+    - [数据预处理阶段](#3数据预处理阶段)
+        - [语言识别](#31语言识别)
+        - [数据清洗](#32数据清洗)
+        - [质量评估](#33质量评估)
+        - [数据去重](#34数据去重)
+    - [数据分析阶段](#4数据分析阶段)
+- [配置](#配置)
+- [使用指南](#使用指南)
+- [联系我们](#联系我们)
+- [参考项目](#参考项目)
+- [许可证](#许可证)
 
 ## 安装
 
@@ -84,9 +80,9 @@ git clone https://github.com/FlagOpen/FlagData.git
 pip install -r requirements.txt
 ```
 
-##  3. <a name='-1'></a>快速上手
+## 快速上手
 
-###  3.1. <a name='-1'></a>1、数据来源阶段
+### 1、数据来源阶段
 
 我们提供了基于OpenAI接口的数据增强模块，
 利用OpenAI接口，以三种不同策略，构建一系列针对不同能力的单轮SFT数据。策略包括：
@@ -97,7 +93,7 @@ pip install -r requirements.txt
 
 具体示例见[数据增强模块下的readMe](flagdata/data_gen/README_zh.md)
 
-###  3.2. <a name='-1'></a>2、数据准备阶段
+### 2、数据准备阶段
 
 all2txt模块下，将pdf2txt、epub2txt等非结构化/半结构化的文件转成txt，并且可以很好的解决单栏、双栏，以及图表穿插中文本的顺序等导致问题文本内容不连贯的问题。
 
@@ -107,9 +103,9 @@ Image(图)", "Formula（公式）" 等，工具脚本提供保留全文，以及
 
 具体示例见[all2txt模块下的readMe](flagdata/all2txt/README_zh.md)
 
-###  3.3. <a name='-1'></a>3、数据预处理阶段
+### 3、数据预处理阶段
 
-####  3.3.1. <a name='-1'></a>3.1 语言识别
+#### 3.1 语言识别
 
 language_identification模块下，使用 fastText 的语言分类器来做分类，fastText 的语言分类器是在 Wikipedia、Tatoeba、SETimes
 上面训练的，使用了 n-grams 来作为特征，使用了层级的 softmax。支持 176 种语言的分类，并且最后会输出一个 0~1 的分数。
@@ -118,7 +114,7 @@ language_identification模块下，使用 fastText 的语言分类器来做分�
 + 对于每一个网页做一次语言分类，得到分类的分数。
 + 对于一般清洗规则，如果大于 0.5，那么就分类为某个特定的语言，否则表示不确定是什么语言的网页并丢掉这个网页。
 
-####  3.3.2. <a name='-1'></a>3.2 数据清洗
+#### 3.2 数据清洗
 
 cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理数据。使用 SharedMemoryManager 创建可共享的数据结构，在数据处理中多进程共享数据。
 
@@ -150,7 +146,7 @@ cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理�
 
 清洗后的文件会以`jsonl`的格式保存到配置文件中指定的`output`参数对应的路径。
 
-####  3.3.3. <a name='-1'></a>3.3 质量评估
+#### 3.3 质量评估
 
 选择BERT和fasttext作为评估模型，是因为它们具有以下优点：
 
@@ -161,7 +157,7 @@ cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理�
 
 具体示例见[quality_assessment模块下的readMe](flagdata/quality_assessment/README_zh.md)
 
-####  3.3.4. <a name='-1'></a>3.4 数据去重
+#### 3.4 数据去重
 
 deduplication模块下，提供海量文本数据去重能力，该阶段使用的是MinHashLSH（最小哈希局部敏感哈希）通过将文本转换为一系列哈希值，以便比较文本之间的相似性。
 
@@ -196,7 +192,7 @@ Spark 的原生算子来进行处理。
 
 如果用户只是单单将python函数改成spark任务，如果没有spark集群是不行的。这里详细的写了傻瓜式搭建集群的文档，方便小白用户使用。具体示例见[spark集群搭建](flagdata/deduplication/README_zh.md)
 
-###  3.4. <a name='-1'></a>4、数据分析
+### 4、数据分析阶段
 
 analysis数据分析模块提供如下功能：
 （1）文本的平均轮次分析代码，计算平均轮次（以换行符为例）
@@ -206,7 +202,7 @@ analysis数据分析模块提供如下功能：
 
 具体详细示例见[analysis模块下的readMe](flagdata/analysis/README_zh.md)
 
-##  4. <a name='-1'></a>配置
+## 配置
 
 针对`数据清洗`、`数据质量评估`模块，
 我们提供了配置文件模板：[cleaner_config.yaml](https://dorc.baai.ac.cn/resources/projects/FlagData/cleaner_config.yaml)， [bert_config.yaml](flagdata/quality_assessment/Bert/bert_config.yaml)。
@@ -214,7 +210,7 @@ analysis数据分析模块提供如下功能：
 
 以下是一些你需要注意的重要参数：
 
-###  4.1. <a name='-1'></a>数据清洗
+### 数据清洗
 
    ```yaml
    # 待清洗的原始数据
@@ -223,7 +219,7 @@ analysis数据分析模块提供如下功能：
    output: ./demo/output.jsonl
    ```
 
-###  4.2. <a name='-1'></a>数据质量评估
+### 数据质量评估
 
    ```yaml
    # 数据评估模型可以从[ChineseWebText下载](https://github.com/CASIA-LM/ChineseWebText)
@@ -233,17 +229,17 @@ analysis数据分析模块提供如下功能：
    text_key: "raw_content"
    ```
 
-##  5. <a name='-1'></a>使用指南
+## 使用指南
 
 我们提供了一系列使用指南，帮助用户快速体验FlagData的特性。
 
 * [Tutorial 1: 清洗从互联网上获取到的原始文本](/docs/tutorial_01_cleaner.md)
 
-##  6. <a name='-1'></a>联系我们
+## 联系我们
 
 如果你对本项目的使用和代码有任何问题，可以提交issue。同时你也可以通过邮箱 data@baai.ac.cn 直接联系我们
 
-##  7. <a name='-1'></a>参考项目
+## 参考项目
 
 本项目部分参考自以下代码：
 [GeneralNewsExtractor](https://github.com/GeneralNewsExtractor/GeneralNewsExtractor),
@@ -255,6 +251,6 @@ analysis数据分析模块提供如下功能：
 [unstructured](https://github.com/Unstructured-IO/unstructured)
 [minHash](https://github.com/ChenghaoMou/text-dedup)
 
-##  8. <a name='-1'></a>许可证
+## 许可证
 
 FlagData项目基于 [Apache 2.0 协议](LICENSE)。
