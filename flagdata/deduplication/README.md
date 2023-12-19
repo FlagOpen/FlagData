@@ -191,10 +191,10 @@ scp -r spark-2.3.1 root@120.92.85.38:spark-standalone (the address of worker sta
 3. Start the spark cluster
 
 ```bash
-启动master
+Start master
 ./sbin/start-master.sh
 ./sbin/stop-master.sh #Close master
-启动work
+Start work
 ./sbin/start-workers.sh
 ./sbin/stop-worker.sh  #close work
 ```
