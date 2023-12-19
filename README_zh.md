@@ -24,7 +24,7 @@ FlagData支持以下特性：
 * 支持数据质量评估与常见数据分析。
 
 完整的pipeline流程以及功能如下图：
-![pipeline](pipeline.png)
+![pipeline](pipeline_zh.png)
 
 ## 动态
 
