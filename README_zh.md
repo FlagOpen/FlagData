@@ -26,7 +26,7 @@ FlagData支持以下特性：
 完整的pipeline流程以及功能如下图：
 ![pipeline](pipeline.png)
 
-##  1. <a name=''></a>动态
+## 动态
 
 - [Dec 15st, 2023] FlagData v1.1.0 升级
 - [Jan 31st, 2023] FlagData v1.0.0 上线了!
