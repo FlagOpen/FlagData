@@ -11,7 +11,7 @@
 </div>
 
 -----------------------------------------------------------------------
-data is one of the basic elements in the development of artificial intelligence. With the continuous breakthrough of large-scale pre-training model and related technology, it is becoming more and more important to use efficient data processing tools to improve data quality in the corresponding research. So we launched FlagData, an easy-to-use and easy-to-extend data processing toolkit. FlagData integrates several data processing tools and algorithms including data source, data preparation, data preprocessing and data analysis, which provides a strong data level support for model training and deployment in natural language processing, computer vision and other fields.
+data is one of the basic elements in the development of artificial intelligence. With the continuous breakthrough of large-scale pre-training model and related technology, it is becoming more and more important to use efficient data processing tools to improve data quality in the corresponding research. So we launched FlagData, an easy-to-use and easy-to-extend data processing toolkit. FlagData integrates several data processing tools and algorithms including data acquisition, data preparation, data preprocessing and data analysis, which provides a strong data level support for model training and deployment in natural language processing, computer vision and other fields.
 
 FlagData supports the following features:
 
@@ -36,7 +36,7 @@ The complete pipeline process and features such as
 
 - [Installation](#Installation)
 - [Quick Start](#Quick-Start)
-    - [Data source phase](#Data-source-phase)
+    - [Data acquisition phase](#Data-acquisition-phase)
     - [Data preparation phase](#Data-preparation-phase)
     - [data preprocessing phase](#data-preprocessing-phase)
         - [Language recognition](#Language-recognition)
@@ -83,7 +83,7 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-### Data source phase
+### Data acquisition phase
 
 The OpenAI interface is utilized to construct a series of single rounds of SFT data for different abilities with three different strategies. The strategies include:
 
