@@ -1,3 +1,5 @@
+# 数据准备阶段>语言识别
+
 LID 代表 Language identification，是语言识别的模型。
 
 + 使用 fastText 的语言分类器来做分类，fastText 的语言分类器是在 Wikipedia、Tatoeba、SETimes 上面训练的，使用了 n-grams 来作为特征，使用了层级的 softmax。支持 176 种语言的分类，并且最后会输出一个 0~1 的分数。

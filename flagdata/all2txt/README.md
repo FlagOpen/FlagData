@@ -1,3 +1,4 @@
+# Data preparation phase
 Under the all2txt module, the unstructured / semi-structured files such as pdf2txt and epub2txt can be converted into txt, and it can well solve the problem of incoherent text content caused by single column, double column, and the order of Chinese text interspersed with charts.
 
 At the same time, the types of elements after parsing are "Table", "FigureCaption", "NarrativeText", "ListItem", "

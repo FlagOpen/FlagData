@@ -1,3 +1,4 @@
+# data preprocessing phase > Quality assessment
 BERT and fasttext were chosen as evaluation models because they have the following advantages:
 
 1. the BERT model performs well in text categorization and comprehension tasks, has strong language understanding and

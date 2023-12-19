@@ -1,3 +1,5 @@
+# Data acquisition phase
+
 ### Data enhancement module based on OpenAI interface
 
 The OpenAI interface is utilized to construct a series of single rounds of SFT data for different abilities with three different strategies. The strategies include:

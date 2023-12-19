@@ -1,4 +1,6 @@
+# Data analysis phase
 Some common functional functions are provided in data analysis
+
 （1）Average rounds of text analysis code to calculate average rounds (in terms of line breaks)：
 
 ```bash
