@@ -19,7 +19,7 @@ FlagData supports the following features:
 
 * High-quality structured data can be quickly cleaned from the original html/text/pdf/epub, and sensitive information can be filtered to avoid the risk of privacy disclosure.
 
-* support de-duplication of massive text data, and provide detailed deployment documents.
+* Support massive text data de-duplication, and provide detailed multi-machine distributed data processing system deployment documents.
 
 * support data quality assessment and common data analysis.
 
@@ -47,7 +47,6 @@ The complete pipeline process and features such as
 - [Configuration](#Configuration)
     - [Data cleaning](#Data-cleaning)
     - [Data Quality assessment](#Data-Quality-assessment)
-- [User's guide](#Users-guide)
 - [Contact us](#Contact-us)
 - [Reference project](#Reference-project)
 - [License](#License)
@@ -148,6 +147,8 @@ It takes only two steps to use the data cleaning feature of FlagData:
 
 The cleaned file will be saved in the format `jsonl` to the path corresponding to the `output` parameter specified in the configuration file.
 
+See [Tutorial 1: 清洗从互联网上获取到的原始文本](/flagdata/cleaner/tutorial_01_cleaner.md) for an example.
+
 #### Quality assessment
 
 BERT and fasttext were selected as the evaluation model because they have the following advantages:
@@ -238,12 +239,6 @@ Here are some important parameters you need to pay attention to:
    # The text_key field is the field being evaluated
    text_key: "raw_content"
    ```
-
-## User's guide
-
-We provide a series of user guides to help users quickly experience the features of FlagData.
-
-* [Tutorial 1: Clean the original text obtained from the Internet](/docs/tutorial_01_cleaner.md)
 
 ## Contact us
 

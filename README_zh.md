@@ -19,7 +19,7 @@ FlagData支持以下特性：
 
 * 可从原始html/text/pdf/epub 快速清洗得到高质量结构化数据，注重敏感信息滤除，避免隐私泄露风险。
 
-* 支持海量文本数据去重，并提供详细的部署文档。
+* 支持海量文本数据去重，并提供详细的多机分布式数据处理系统部署文档。
 
 * 支持数据质量评估与常见数据分析。
 
@@ -47,10 +47,9 @@ FlagData支持以下特性：
 - [配置](#3配置)
   - [数据清洗](#31数据清洗)
   - [数据质量评估](#32数据质量评估)
-- [使用指南](#4使用指南)
-- [联系我们](#5联系我们)
-- [参考项目](#6参考项目)
-- [许可证](#7许可证)
+- [联系我们](#4联系我们)
+- [参考项目](#5参考项目)
+- [许可证](#6许可证)
 
 ## 1、安装
 
@@ -148,6 +147,8 @@ Image(图)", "Formula（公式）" 等，工具脚本提供保留全文，以及
 
 清洗后的文件会以`jsonl`的格式保存到配置文件中指定的`output`参数对应的路径。
 
+具体示例见[Tutorial 1: 清洗从互联网上获取到的原始文本](/flagdata/cleaner/tutorial_01_cleaner.md)
+
 #### 2.3.3、质量评估
 
 选择BERT和fasttext作为评估模型，是因为它们具有以下优点：
@@ -237,17 +238,11 @@ analysis数据分析模块提供如下功能：
    text_key: "raw_content"
    ```
 
-## 4、使用指南
-
-我们提供了一系列使用指南，帮助用户快速体验FlagData的特性。
-
-* [Tutorial 1: 清洗从互联网上获取到的原始文本](/docs/tutorial_01_cleaner.md)
-
-## 5、联系我们
+## 4、联系我们
 
 如果你对本项目的使用和代码有任何问题，可以提交issue。同时你也可以通过邮箱 data@baai.ac.cn 直接联系我们
 
-## 6、参考项目
+## 5、参考项目
 
 本项目部分参考自以下代码：
 [GeneralNewsExtractor](https://github.com/GeneralNewsExtractor/GeneralNewsExtractor),
@@ -259,6 +254,6 @@ analysis数据分析模块提供如下功能：
 [unstructured](https://github.com/Unstructured-IO/unstructured)
 [minHash](https://github.com/ChenghaoMou/text-dedup)
 
-## 7、许可证
+## 6、许可证
 
 FlagData项目基于 [Apache 2.0 协议](LICENSE)。
