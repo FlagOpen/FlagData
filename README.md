@@ -192,6 +192,8 @@ When using UDF, you should consider performance and optimization. Some functions
 For complex logic or functions that require a lot of memory, further optimization and consideration may be required. UDF is designed for simple logic and data processing, and for more complex calculations, you may need to use the
 Spark's native operator for processing.
 
+The deduplication module provides a common Python function (to determine whether it is a substring of other strings) to use spark udf rewriting, which makes it easy to use spark distributed capabilities. For more information, please see `stringMatching.py` and `stringMatching.py`.
+
 If the user simply changes the python function to a spark task, it will not work without a spark cluster. Here a detailed document of building a cluster is written in detail, which is convenient for novice users.
 
 See [Spark cluster building](flagdata/deduplication/README.md) for an example.

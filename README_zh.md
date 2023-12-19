@@ -192,6 +192,8 @@ spark单一能力的集成：
 对于复杂的逻辑或需要大量内存的函数，可能需要进一步的优化和考虑。UDF 是为了简单的逻辑和数据处理而设计的，对于更复杂的计算，可能需要使用
 Spark 的原生算子来进行处理。
 
+deduplication模块下提供了普通Python函数（判断是否是其他字符串的子字符串）使用spark udf的改写，可以方便的使用spark分布式能力，详细请见`stringMatching.py`和`udf_spark_stringMatching.py`的对比
+
 如果用户只是单单将python函数改成spark任务，如果没有spark集群是不行的。这里详细的写了傻瓜式搭建集群的文档，方便小白用户使用。具体示例见[spark集群搭建](flagdata/deduplication/README_zh.md)
 
 ### 2.4、数据分析阶段
