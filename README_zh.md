@@ -116,6 +116,8 @@ Image(图)", "Formula（公式）" 等，工具脚本提供保留全文，以及
 + 对于每一个网页做一次语言分类，得到分类的分数。
 + 对于一般清洗规则，如果大于 0.5，那么就分类为某个特定的语言，否则表示不确定是什么语言的网页并丢掉这个网页。
 
+具体示例见[language_identification模块下的readMe](flagdata/language_identification/README_zh.md)
+
 #### 2.3.2、数据清洗
 
 &emsp;&emsp;cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理数据。使用 SharedMemoryManager 创建可共享的数据结构，在数据处理中多进程共享数据。

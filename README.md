@@ -117,6 +117,8 @@ The above training uses n-grams as a feature and uses a hierarchical softmax. Su
 + Do a language classification for each web page and get the score of the classification.
 + For general cleaning rules, if it is greater than 0.5, it is classified as a specific language, otherwise it indicates that the page is not sure what language it is and discards the page.
 
+See [ReadMe under language_identification Module](flagdata/language_identification/README.md) for an example.
+
 #### Data cleaning
 
 The cleaner module uses multi-process pool mp.Pool to process data in parallel in a multi-process manner. Use SharedMemoryManager to create shareable data structures, and multiple processes share data in data processing.
