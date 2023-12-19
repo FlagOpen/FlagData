@@ -147,7 +147,7 @@ It takes only two steps to use the data cleaning feature of FlagData:
 
 The cleaned file will be saved in the format `jsonl` to the path corresponding to the `output` parameter specified in the configuration file.
 
-See [Tutorial 1: 清洗从互联网上获取到的原始文本](/flagdata/cleaner/tutorial_01_cleaner.md) for an example.
+See [Tutorial 1: Clean the original text obtained from the Internet](/flagdata/cleaner/tutorial_01_cleaner.md) for an example.
 
 #### Quality assessment
 
