@@ -20,7 +20,7 @@ python average_rotation_analysis.py
 ```
 
 Output as nested pie chart
-<img src="./png/field_distribution.png" alt="领域分布图" width="800" height="400">
+![领域分布图](./png/field_distribution_analysis.gif)
 
 （3）Language distribution of text
 
@@ -29,7 +29,7 @@ python language_distribution_analysis.py
 ```
 
 Output as pie chart
-<img src="./png/language_distribution.png" alt="语言分布图" width="600" height="400">
+![领域分布图](./png/language_distribution_analysis.png)
 
 （4）Text length analysis
 

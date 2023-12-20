@@ -1,93 +1,85 @@
-# Copyright © 2023 BAAI. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License")
+import plotly.express as px
 
-
-import matplotlib.pyplot as plt
-import numpy as np
-
-# 定义你提供的数据
+# Your provided data
 data = {
-    "Understanding ability": {"Total_number": 40, "Secondary_classification": {
-        "Information Analysis": 10,
-        "Information extraction": 10,
-        "Information Summary": 10,
-        "Cross linguistic understanding": 5,
-        "Discriminant evaluation": 5
-    }},
-    "Knowledge application": {"Total_number": 20, "Secondary_classification": {
-        "Knowledge Q&A": 10,
-        "Common sense Q&A": 5,
-        "Fact Q&A": 5
-    }},
-    "Inference ability": {"Total_number": 10, "Secondary_classification": {
-        "Knowledge reasoning": 5,
-        "Symbolic reasoning": 5
-    }},
-    "Generative ability": {"Total_number": 7, "Secondary_classification": {
-        "Conditional generation": 4,
-        "Code generation": 2,
-        "Creative Generation": 1
-    }},
-    "Explanatory ability": {"Total_number": 5, "Secondary_classification": {
-        "Psychological counseling": 3,
-        "Language Analysis": 2
-    }},
-    "Values": {"Total_number": 5, "Secondary_classification": {
-        "Discrimination and Prejudice": 2,
-        "Security": 2,
-        "Ethics and Morality": 1
-    }},
-    "Cultural understanding": {"Total_number": 7, "Secondary_classification": {
-    }},
-    "Illusion": {"Total_number": 3, "Secondary_classification": {
-    }},
-    "General comprehensive ability": {"Total_number": 2, "Secondary_classification": {
-    }},
-    "Domain expert capabilities": {"Total_number": 1, "Secondary_classification": {
-    }}
+    "理解能力": {
+        "Total_number": 40,
+        "Secondary_classification": {
+            "信息分析": 10,
+            "信息提取": 10,
+            "信息概括": 10,
+            "跨语言理解": 5,
+            "文化理解": 4,
+            "判别评价": 1
+        }
+    },
+    "知识运用": {
+        "Total_number": 20,
+        "Secondary_classification": {
+            "知识问答": 10,
+            "常识问答": 5,
+            "事实问答": 5
+        }
+    },
+    "推理能力": {
+        "Total_number": 10,
+        "Secondary_classification": {
+            "知识推理": 5,
+            "符号推理": 5
+        }
+    },
+    "特殊生成": {
+        "Total_number": 7,
+        "Secondary_classification": {
+            "条件生成": 4,
+            "代码生成": 2,
+            "创意生成": 1
+        }
+    },
+    "解释能力": {
+        "Total_number": 5,
+        "Secondary_classification": {
+            "心理疏导": 3,
+            "语言解析": 2
+        }
+    },
+    "价值观": {
+        "Total_number": 5,
+        "Secondary_classification": {
+            "歧视偏见": 2,
+            "安全": 2,
+            "伦理道德": 1
+        }
+    },
+    "幻觉": {
+        "Total_number": 3,
+        "Secondary_classification": {}
+    },
+    "通用综合能力": {
+        "Total_number": 2,
+        "Secondary_classification": {}
+    },
+    "领域专家能力": {
+        "Total_number": 1,
+        "Secondary_classification": {}
+    }
 }
 
-# 准备绘图数据
-categories = list(data.keys())
-outer_labels = []
-outer_sizes = []
-inner_labels = []
-inner_sizes = []
 
-# 遍历一级分类
-for category in categories:
-    outer_labels.append(category)
-    outer_sizes.append(data[category]["Total_number"])
+# Function to convert nested data to a list of dictionaries suitable for Sunburst Chart
+def convert_to_sunburst(data, name='', parent=None):
+    result = []
+    if isinstance(data, dict):
+        for key, value in data.items():
+            if isinstance(value, dict) and 'Secondary_classification' in value:
+                result += convert_to_sunburst(value['Secondary_classification'], name + key + '/', name + key)
+            else:
+                result.append({'id': name + key, 'parent': parent, 'value': value})
+    return result
 
-    # 获取二级分类数据
-    subcategories = list(data[category]["Secondary_classification"].keys())
-    inner_labels.extend(subcategories)
-    inner_sizes.extend(list(data[category]["Secondary_classification"].values()))
 
-# 绘制双层环形图
-fig, ax = plt.subplots()
-ax.axis('equal')
+sunburst_data = convert_to_sunburst(data)
 
-# 外层环形图
-wedges1 = ax.pie(outer_sizes, labels=outer_labels, radius=1, autopct='%1.1f%%', startangle=90)
-
-# 内层环形图
-wedges2 = ax.pie(inner_sizes, radius=0.7, startangle=90)[0]  # 获取饼图块列表
-
-# 设置内层环形图标签
-bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
-kw = dict(arrowprops=dict(arrowstyle="-"),
-          bbox=bbox_props, zorder=0, va="center")
-
-for i, p in enumerate(wedges2):
-    ang = (p.theta2 - p.theta1) / 2. + p.theta1
-    y = np.sin(np.deg2rad(ang))
-    x = np.cos(np.deg2rad(ang))
-    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
-    connectionstyle = f"angle,angleA=0,angleB={ang}"
-    kw["arrowprops"].update({"connectionstyle": connectionstyle})
-    ax.annotate(inner_labels[i], xy=(x, y), xytext=(1.35 * np.sign(x), 1.4 * y),
-                horizontalalignment=horizontalalignment, **kw)
-
-plt.show()
+# Create Sunburst Chart using Plotly Express
+fig = px.sunburst(sunburst_data, path=['parent', 'id'], values='value')
+fig.show()

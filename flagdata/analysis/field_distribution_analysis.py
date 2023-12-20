@@ -1,7 +1,3 @@
-# Copyright © 2023 BAAI. All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License")
-
 import os
 import requests
 import json, copy
@@ -81,7 +77,7 @@ def temp_level1(input):
 def temp_level2(input, level1):
     tasks_desc = {}
 
-    if level1 in ['伦理道德', '幻觉', '通用综合能力', '领域专家能力']:
+    if level1 in ['幻觉', '通用综合能力', '领域专家能力']:
         return "没有能力等级2"
     elif level1 == "理解能力":
         tasks_desc = level2_1
