@@ -133,3 +133,5 @@ codescikit-learn==1.3.0
 pytorch==2.0.1
 jieba==0.42.1
 zhconv==1.4.3
+plotly-express==0.4.1
+plotly==5.18.0
