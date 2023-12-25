@@ -1,7 +1,7 @@
 # Copyright © 2023 BAAI. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License")
-
+import json
 
 import argparse
 from unstructured.partition.epub import partition_epub
@@ -9,12 +9,9 @@ from unstructured.partition.epub import partition_epub
 
 def epub2txt(input_path, process_all):
     elements = partition_epub(filename=input_path)
-    all_file = None
-
     if process_all:
         # Create an empty dictionary to store lists of elements in different categories
         tables = {}
-
         # Define the list of categories to filter
         categories = [
             "Table", "FigureCaption", "NarrativeText", "ListItem", "Title", "Address",
@@ -23,20 +20,19 @@ def epub2txt(input_path, process_all):
 
         # Traverse each category, filter out the elements of the corresponding category and store them in the dictionary
         for category in categories:
+            el_list = []
             # Check whether it is in the category of "Table". You need to deal with "table.metadata.text_as_html" separately.
+            tables_temp = [el for el in elements if el.category == category]
+            for j in tables_temp:
+                el_list.append(j.text)
+            tables[category] = el_list.copy()  # Use .copy() to avoid modifying the same list object
             if category == "Table":
-                tables[category] = [el for el in elements if el.category == category]
                 # Additional storage "table.metadata.text_as_html"
                 tables["Table_text_as_html"] = [el.metadata.text_as_html for el in elements if el.category == category]
-            else:
-                # For other categories, filter elements are stored directly
-                tables[category] = [el for el in elements if el.category == category]
-        all_file = tables
     else:
-        print(elements)
-        all_file = "\n\n".join([str(el) for el in elements])
-
-    return all_file
+        tables = "\n\n".join([str(el) for el in elements])
+    print(tables)
+    return tables
 
 
 if __name__ == '__main__':
@@ -56,9 +52,7 @@ if __name__ == '__main__':
     with open(output_file_path, 'w', encoding='utf-8') as output_file:
         if isinstance(result, dict):
             # If the result is a dictionary type, write the contents of the dictionary to the file
-            for key, value in result.items():
-                output_file.write(f"Category: {key}\n")
-                output_file.write(f"{value}\n\n")
+            json.dump(result, output_file, ensure_ascii=False, indent=4)
         else:
             # If the result is not a dictionary, write directly to the file
             output_file.write(result)
