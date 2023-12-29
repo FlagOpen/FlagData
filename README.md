@@ -243,6 +243,7 @@ Here are some important parameters you need to pay attention to:
 ## Contact us
 
 If you have any questions about the use and code of this project, you can submit issue. At the same time, you can contact us directly through data@baai.ac.cn.
+
 An active community is inseparable from your contribution, if you have a new idea, welcome to join our community, let us become a part of open source, together to contribute our own efforts for open source!
 ![contact_me](contact_me.png)
 
