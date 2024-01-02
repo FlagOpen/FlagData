@@ -15,20 +15,18 @@ data is one of the basic elements in the development of artificial intelligence.
 
 FlagData supports the following features:
 
-* it can be used with simple configuration after installation, and the custom feature can be realized with low code volume.
+* Realize the high-quality content extraction of various original format data, and greatly reduce the processing cost.
 
-* High-quality structured data can be quickly cleaned from the original html/text/pdf/epub, and sensitive information can be filtered to avoid the risk of privacy disclosure.
+* Provide the function of fine-tuning data perspective for large models.
 
-* Support massive text data de-duplication, and provide detailed multi-machine distributed data processing system deployment documents.
-
-* support data quality assessment and common data analysis.
+* One-stop efficient distributed data processing function.
 
 The complete pipeline process and features such as
 ![pipeline](pipeline.png)
 
 ##  News
 
-- [Dec 15st, 2023] FlagData v1.1.0 has been upgraded
+- [Dec 31st, 2023] FlagData v2.0.0 has been upgraded
 - [Jan 31st, 2023] FlagData v1.0.0 is online!
 
 --------------------------------------------------------------------------------
