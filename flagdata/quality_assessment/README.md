@@ -4,7 +4,7 @@ BERT and fasttext were chosen as evaluation models because they have the followi
 1. the BERT model performs well in text categorization and comprehension tasks, has strong language understanding and
    representation capabilities, and can effectively assess text quality.
 2. FastText models have efficient training and inference speeds while maintaining classification performance, which can
-   significantly reduce training and inference time.
+   significantly reduce training and inference time, version number 0.9.2 of fasttext
 
 The article compares different text categorization models including logistic regression, BERT and FastText to
 evaluate their performance. In the experiments, the BERTEval and FastText models perform well in text categorization
