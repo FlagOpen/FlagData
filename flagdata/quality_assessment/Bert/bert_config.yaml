@@ -1,0 +1,38 @@
+bert_model_path: "models"
+efl_encode: false
+r_dropout: 0.0
+batch_size: 4
+num_workers: 16
+bert_batch_size: null
+cuda: true
+device: "cuda"
+data_path: "input_data/"
+output_path: "output_data/"
+data_sample_rate: 1.0
+chunk_sizes: [ 90, 30, 130, 10 ]
+tokenizer_path: "models/tokenizer"
+pretrained_model_path: "models/bert-base-chinese"
+prompt: "p8"
+fold: "3"
+learning_rate: 6e-5
+bert_freeze_layers: 11
+beta1: 0.9
+beta2: 0.999
+weight_decay: 0.005
+epochs: 20
+train_mode: "pretrain"
+loss_cfg:
+  loss_weights:
+    alpha: 0.6
+    beta: 0.2
+    gamma: 0.2
+  mr_bias: 0.0
+save_steps: 300
+log_steps: 10
+save_strategy: "steps"
+save_total_limit: 100
+cc_score: 0
+checkpoint: "models/pretrain/2023-08-16-21-36/model-epoch_19-step_2999.pt"
+whole_segment: true
+score_threshold: 0.37
+text_key: "raw_content"

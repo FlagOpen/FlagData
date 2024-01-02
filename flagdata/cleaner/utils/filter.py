@@ -168,8 +168,10 @@ class TextCleaner(BasicCleaner):
         urls = re.findall(self.url_regex_set.URL_REGEX, article)
         all_regex_urls_temp = [y for y in list(set(sum([re.split(r'http:|https:|ftp:|HTTP:|HTTPS:|FTP:', ''.join(
             x for x in url if x in string.printable)) for url in urls], []))) if len(y) > 1]
-        all_regex_urls = list(map(lambda x: 'http:' + x, all_regex_urls_temp)) + list(map(lambda x: 'https:' + x, all_regex_urls_temp)) + list(map(lambda x: 'ftp:' + x, all_regex_urls_temp)) + \
-            list(map(lambda x: 'HTTP:' + x, all_regex_urls_temp)) + list(map(lambda x: 'HTTPS:' + x, all_regex_urls_temp)) + list(map(lambda x: 'FTP:' + x, all_regex_urls_temp))
+        all_regex_urls = list(map(lambda x: 'http:' + x, all_regex_urls_temp)) + list(
+            map(lambda x: 'https:' + x, all_regex_urls_temp)) + list(map(lambda x: 'ftp:' + x, all_regex_urls_temp)) + \
+                         list(map(lambda x: 'HTTP:' + x, all_regex_urls_temp)) + list(
+            map(lambda x: 'HTTPS:' + x, all_regex_urls_temp)) + list(map(lambda x: 'FTP:' + x, all_regex_urls_temp))
         patterns_regex = '|'.join(all_regex_urls).replace(',', '').replace(':', '\:').replace('?', '\?').replace(
             '=', '\=').replace('&', '\&').replace('.', '\.').replace('#', '\#').replace('/', '\/')
         cleaned_article = re.sub(
@@ -177,12 +179,19 @@ class TextCleaner(BasicCleaner):
         if 'http' in cleaned_article:
             urls_further = re.findall(
                 self.url_regex_set.URL_REGEX_FURTHER, cleaned_article)
-            all_regex_urls_temp_further = [y for y in list(set(sum([re.split(r'http:|https:|ftp:|HTTP:|HTTPS:|FTP:', ''.join(
-                x for x in url if x in string.printable)) for url in urls_further], []))) if len(y) > 1]
-            all_regex_urls_further = list(map(lambda x: 'http:' + x, all_regex_urls_temp_further)) + list(map(lambda x: 'https:' + x, all_regex_urls_temp_further)) + list(map(lambda x: 'ftp:' + x, all_regex_urls_temp_further)) + list(
-                map(lambda x: 'HTTP:' + x, all_regex_urls_temp_further)) + list(map(lambda x: 'HTTPS:' + x, all_regex_urls_temp_further)) + list(map(lambda x: 'FTP:' + x, all_regex_urls_temp_further))
+            all_regex_urls_temp_further = [y for y in
+                                           list(set(sum([re.split(r'http:|https:|ftp:|HTTP:|HTTPS:|FTP:', ''.join(
+                                               x for x in url if x in string.printable)) for url in urls_further], [])))
+                                           if len(y) > 1]
+            all_regex_urls_further = list(map(lambda x: 'http:' + x, all_regex_urls_temp_further)) + list(
+                map(lambda x: 'https:' + x, all_regex_urls_temp_further)) + list(
+                map(lambda x: 'ftp:' + x, all_regex_urls_temp_further)) + list(
+                map(lambda x: 'HTTP:' + x, all_regex_urls_temp_further)) + list(
+                map(lambda x: 'HTTPS:' + x, all_regex_urls_temp_further)) + list(
+                map(lambda x: 'FTP:' + x, all_regex_urls_temp_further))
             patterns_regex_further = '|'.join(all_regex_urls_further).replace(',', '').replace(':', '\:').replace(
-                '?', '\?').replace('=', '\=').replace('&', '\&').replace('.', '\.').replace('#', '\#').replace('/', '\/')
+                '?', '\?').replace('=', '\=').replace('&', '\&').replace('.', '\.').replace('#', '\#').replace('/',
+                                                                                                               '\/')
             cleaned_article = re.sub(
                 patterns_regex_further, '', cleaned_article, 1000, flags=re.I).strip()
         return cleaned_article
@@ -245,7 +254,7 @@ class TextIntegrityChecker(BasicCleaner):
             double-mark validation
         '''
         new_article = [x for x in self.rules.ALL_LANGUAGE_WHOLE_SENTENCE_MARK if (
-            (x[0] in article) and (x[1] in article))]
+                (x[0] in article) and (x[1] in article))]
         if len(new_article) >= 1:
             return article
         else:
@@ -265,3 +274,19 @@ class TextIntegrityChecker(BasicCleaner):
                 if not article:
                     break
         return article.strip()
+
+
+class ReprintDeclarationCleaning(BasicCleaner):
+    def __init__(self):
+        self.patterns = [
+            re.compile(r'版权声明：.*?原文链接：.*?$', re.DOTALL | re.MULTILINE),
+            re.compile(r'作者：.*?链接：.*?来源：知乎.*?著作权归作者所有。.*?$', re.DOTALL | re.MULTILINE),
+            re.compile(r'@著作权归作者所有，转载或内容合作请联系作者.*?禁止转载，如需转载请通过简信或评论联系作者。',
+                       re.DOTALL),
+            re.compile(r'本文来自博客园，作者：.*?，转载请注明原文链接：.*?$', re.MULTILINE)
+        ]
+
+    def clean_article(self, article):
+        for pattern in self.patterns:
+            article = pattern.sub('', article)
+        return article
