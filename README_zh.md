@@ -21,7 +21,6 @@ FlagData支持以下特性：
 
 * 一站式高效分布式数据处理功能
 
-
 完整的pipeline流程以及功能如下图：
 ![pipeline](pipeline_zh.png)
 
