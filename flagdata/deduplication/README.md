@@ -1,7 +1,7 @@
-# data preprocessing phase > Data deduplication
+# Data preprocessing phase > Data deduplication
 The following describes in detail how to use distributed capabilities for data deduplication
 
-first. Build a Spark standalone cluster (1 master2 worker)
+First. Build a Spark standalone cluster (1 master2 worker)
 1. Install jdk
 
 a. Download the jdk package

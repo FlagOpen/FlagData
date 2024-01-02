@@ -1,4 +1,4 @@
-# data preprocessing phase > Language recognition
+# Data preprocessing phase > Language recognition
 
 LID stands for Language identification, which is a model for language identification.
 + It uses fastText's language classifier, which is trained on Wikipedia, Tatoeba, and SETimes, uses n-grams as features, and uses a hierarchical softmax. 176 languages are classified, and it outputs a score from 0 to 1.

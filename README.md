@@ -11,7 +11,7 @@
 </div>
 
 -----------------------------------------------------------------------
-data is one of the basic elements in the development of artificial intelligence. With the continuous breakthrough of large-scale pre-training model and related technology, it is becoming more and more important to use efficient data processing tools to improve data quality in the corresponding research. So we launched FlagData, an easy-to-use and easy-to-extend data processing toolkit. FlagData integrates several data processing tools and algorithms including data acquisition, data preparation, data preprocessing and data analysis, which provides a strong data level support for model training and deployment in natural language processing, computer vision and other fields.
+Data is one of the basic elements in the development of artificial intelligence. With the continuous breakthrough of large-scale pre-training model and related technology, it is becoming more and more important to use efficient data processing tools to improve data quality in the corresponding research. So we launched FlagData, an easy-to-use and easy-to-extend data processing toolkit. FlagData integrates several data processing tools and algorithms including data acquisition, data preparation, data preprocessing and data analysis, which provides a strong data level support for model training and deployment in natural language processing, computer vision and other fields.
 
 FlagData supports the following features:
 
@@ -83,10 +83,10 @@ pip install -r requirements.txt
 
 ### Data acquisition phase
 
-The OpenAI interface is utilized to construct a series of single rounds of SFT data for different abilities with three different strategies. The strategies include:
+The LLM interface is utilized to construct a series of single rounds of SFT data for different abilities with three different strategies. The strategies include:
 
 + ImitateGenerator: augment data using several case samples as templates. Supports simultaneous generation of data in multiple languages.
-+ AbilityExtractionGenerator: using the OpenAI interface, generalize the abilities contained in several case samples. Generate new samples and answers based on this collection of capabilities.
++ AbilityExtractionGenerator: using the LLM interface, generalize the abilities contained in several case samples. Generate new samples and answers based on this collection of capabilities.
 + AbilityDirectGenerator: Generate new samples directly related to a specified ability type or task type. For example, if you specify the ability as "Logical Reasoning", you can generate a series of logical reasoning questions and answers. In order to increase the diversity of generated samples, it is supported to exclude already generated samples.
 
 
@@ -103,7 +103,7 @@ Image, Formula, etc. Tool scripts provide two forms: keeping full text and savin
 
 See [ReadMe under all2txt Module](flagdata/all2txt/README.md) for an example.
 
-### data preprocessing phase
+### Data preprocessing phase
 
 #### Language recognition
 
@@ -133,7 +133,7 @@ Currently, the following cleaning rules are included:
 
 It takes only two steps to use the data cleaning feature of FlagData:
 
-1. Modify the data path and format in the YAML configuration file. We give detailed comments on each parameter in the configuration file template to explain its meaning. At the same time, you can refer to[Configuration](#Configuration) Chapter.
+1. Modify the data path and format in the YAML configuration file. We give detailed comments on each parameter in the configuration file template to explain its meaning. At the same time, you can refer to [Configuration](#Configuration) Chapter.
 
 2. Specify the configuration file path in the following code and run it
    ```python
@@ -160,19 +160,19 @@ See [ReadMe under quality_assessment Module](flagdata/quality_assessment/README.
 
 #### Data deduplication
 
-deduplicationModule provides the ability to de-duplicate large amounts of text data, using MinHashLSH (Least Hash Locally Sensitive Hash) by converting text into a series of hash values in order to compare similarities between texts.
+deduplication Module provides the ability to deduplicate large amounts of text data, using MinHashLSH (Least Hash Locally Sensitive Hash) by converting text into a series of hash values in order to compare similarities between texts.
 
 We can control the parameter threshold, which represents the threshold of similarity, with values ranging from 0 to 1. A setting of 1 means that there is an exact match and no text is filtered out. On the contrary, if a lower similarity value is set, texts with slightly higher similarity will also be retained. We can set a higher threshold value as needed to retain only those texts that are very similar, while discard those texts with slightly less similarity. The empirical default value is 0.87. At the same time, we use the distributed computing power of Spark to deal with large-scale data, the idea of MapReduce is used to remove duplicates, and tuned by spark to deal with large-scale text data sets efficiently.
 The following is the similar text iterated in the process of data deduplication, which has slight differences in line wrapping and name editing, but the deduplication algorithm can identify two paragraphs of text that are highly similar.
 
 ```json lines
 {
-  "__id__": 1881195681200,
-  "content": "新华社北京1月11日电 中共全国人大常委会党组10日举行会议,学习习近平总书记在二十届中央纪委二次全会上的重要讲话和全会精神,结合人大工作实际,研究部署贯彻落实工作。全国人大常委会委员长、党组书记栗战书主持会议并讲话......全国人大常委会党组副书记王晨,全国人大常委会党组成员张春贤、沈跃跃、吉炳轩、艾力更·依明巴海、王东明、白玛赤林、杨振武出席会议并发言。 (责任编辑:符仲明)"
+  "__id__":3023656977259,
+  "content":"\"2022海口三角梅花展\"已接待游客3万多名——\n三角梅富了边洋村\n一年四季,美丽的海南岛始终春意盎然、鲜花盛开,而作为海南省省花的三角梅就是其中最引人注目的鲜花品种之一,成为海南的一道亮丽风景线。\n\"可别小看这一盆盆普通的三角梅花,特别受游客喜爱。仅最近一个多月,我们就卖出了200多万元,盆栽三角梅销路火爆......吸引更多本地和外地游客来赏花、买花。(经济日报 记者 潘世鹏)\n(责任编辑:单晓冰)"
 }
 {
-  "__id__": 944892809591,
-  "content": "新华社北京1月11日电 中共全国人大常委会党组10日举行会议,学习习近平总书记在二十届中央纪委二次全会上的重要讲话和全会精神,结合人大工作实际,研究部署贯彻落实工作。全国人大常委会委员长、党组书记栗战书主持会议并讲话......全国人大常委会党组副书记王晨,全国人大常委会党组成员张春贤、沈跃跃、吉炳轩、艾力更·依明巴海、王东明、白玛赤林、杨振武出席会议并发言。\n【纠错】\n【责任编辑:周楚卿\n】"
+  "__id__":3934190045072,
+  "content":"记者 潘世鹏\n\"2022海口三角梅花展\"已接待游客3万多名——\n三角梅富了边洋村\n一年四季,美丽的海南岛始终春意盎然、鲜花盛开,而作为海南省省花的三角梅就是其中最引人注目的鲜花品种之一,成为海南的一道亮丽风景线。\n\"可别小看这一盆盆普通的三角梅花,特别受游客喜爱。仅最近一个多月,我们就卖出了200多万元,盆栽三角梅销路火爆。......吸引更多本地和外地游客来赏花、买花。(经济日报 记者 潘世鹏)"
 }
 ```
 
