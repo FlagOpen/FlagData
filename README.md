@@ -2,7 +2,6 @@
 
 ![FlagData](flagdata_logo.png)
 [![Pypi Package](https://img.shields.io/pypi/v/flagdata?label=pypi%20package)](https://pypi.org/project/flagdata/)
-[![Python Application](https://github.com/FlagOpen/FlagData/actions/workflows/python-app.yml/badge.svg)](https://github.com/FlagOpen/FlagData/actions/workflows/python-app.yml)
 [![License](https://img.shields.io/github/license/FlagOpen/FlagData.svg?color=blue)](https://github.com/FlagOpen/FlagData/blob/main/LICENSE)
 ![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/FlagOpen/FlagData?include_prereleases&style=social)
 
@@ -30,7 +29,7 @@ The complete pipeline process and features such as
 ![pipeline](pipeline.png)
 
 ## News
-
+- [June 13st, 2024] FlagData v3.0.0 update, supports multiple data types, dozens of operator pools for DIY, and generates high-quality data with one click
 - [Dec 31st, 2023] FlagData v2.0.0 has been upgraded
 - [Jan 31st, 2023] FlagData v1.0.0 is online!
 
@@ -49,9 +48,28 @@ The complete pipeline process and features such as
 - [Configuration](#Configuration)
     - [Data cleaning](#Data-cleaning)
     - [Data Quality assessment](#Data-Quality-assessment)
-- [Contact us](#Contact-us)
+- [Operator Pool](#Operator-Pool)
+- [Strong community support](#Strong-community-support)
+- [Users](#Users)
 - [Reference project](#Reference-project)
 - [License](#License)
+
+# V3.0.0 UPDATE
+With the feedback from the community, FlagData has been upgraded. This update provides a set of fool-proof language pre-training data construction tools. According to different data types, we provide one-click data quality improvement tasks such as Html, Text, Book, Arxiv, Qa, etc. Both novice users and advanced users can easily generate high-quality data.
+- Novice users: Just confirm the data type to generate high-quality data.
+- Advanced users: We provide dozens of operator pools for users to DIY their own LLM pre-training data construction process.
+
+**Project Features:**
+
+- Ease of use: Fool-style operation, simple configuration is all that is needed to generate high-quality data.
+- Flexibility: Advanced users can customize the data construction process through various operator pools.
+- Diversity: Supports multiple data types (HTML, Web, Wiki, Book, Paper, QA, Redpajama, Code)
+
+**Key highlights**
+
+- 🚀 Generate high-quality data with one click
+- 🔧 Dozens of operator pools for DIY
+- 🌐 Support for multiple data types
 
 ## Installation
 
@@ -61,14 +79,6 @@ The complete pipeline process and features such as
 pip install -r requirements.txt
 ```
 
-Optionally install the `cleaner` module required in FlagData. You will only install the dependency packages for the
-corresponding modules, which is suitable for users who only want to use the `cleaner` module and do not want to install
-other module dependency packages.
-
-```bash
-pip install flagdata[cleaner]
-```
-
 **Install the latest version of the main branch**
 
 The main branch is officially released by FlagData. If you want to install / update to the latest version of the main
@@ -76,14 +86,6 @@ branch, use the following command:
 
 ```
 git clone https://github.com/FlagOpen/FlagData.git
-pip install .[all]
-```
-
-**Secondary development based on source code**
-
-```bash
-git clone https://github.com/FlagOpen/FlagData.git
-pip install -r requirements.txt
 ```
 
 ## Quick Start
@@ -102,7 +104,7 @@ different strategies. The strategies include:
   answers. In order to increase the diversity of generated samples, it is supported to exclude already generated
   samples.
 
-See [ReadMe under data_gen Module](flagdata/data_gen/README.md) for an example.
+See [Instructions for using the Data Enhancement Module](flagdata/data_gen/README.md) for an example.
 
 ### Data preparation phase
 
@@ -115,7 +117,7 @@ Title [Chapter Title]", "Address [E-mail]","PageBreak", "Header [Header]", "Foot
 UncategorizedText [arxiv vertical number]", "
 Image, Formula, etc. Tool scripts provide two forms: keeping full text and saving by category resolution.
 
-See [ReadMe under all2txt Module](flagdata/all2txt/README.md) for an example.
+See [Instructions for using all2txt modules](flagdata/all2txt/README.md) for an example.
 
 ### Data preprocessing phase
 
@@ -131,43 +133,33 @@ finally outputs a score of 0: 1.
 + For general cleaning rules, if it is greater than 0.5, it is classified as a specific language, otherwise it indicates
   that the page is not sure what language it is and discards the page.
 
-See [ReadMe under language_identification Module](flagdata/language_identification/README.md) for an example.
+See [Instructions for using the language identification module](flagdata/language_identification/README.md) for an example.
 
 #### Data cleaning
 
-The cleaner module uses multi-process pool mp.Pool to process data in parallel in a multi-process manner. Use
-SharedMemoryManager to create shareable data structures, and multiple processes share data in data processing.
+We provide one-click data quality improvement tasks such as Html, Text, Book, Arxiv, Qa, etc. For more customized functions, users can refer to the "data_operator" section.
+##### TextCleaner
+TextCleaner provides a fast and extensible text data cleaning tool. It provides commonly used text cleaning modules.
+Users only need to select the text_clean.yaml file in cleaner_builder.py to process text data.
+For details, see[Instructions for using TextCleaner](flagdata/cleaner/docs/Text_Cleaner.md)
 
-Efficient data cleaning is achieved through multi-processes and shared memory:
+##### ArxivCleaner
+ArxivCleaner provides a commonly used arxiv text data cleaning tool.
+Users only need to select the arxiv_clean.yaml file in cleaner_builder.py to process arxiv data.
 
-Currently, the following cleaning rules are included:
+##### HtmlCleaner
+HtmlCleaner provides commonly used Html format text extraction and data cleaning tools.
+Users only need to run the main method to process arxiv data.
 
-+ Emoticons and meaningless characters (regular)
-+ Clean and reprint copyright notice information (Zhihu, csdn, brief book, blog park)
-+ Remove unreasonable consecutive punctuation marks, and newline characters are unified as\ n
-+ Remove personal privacy, URL and extra spaces such as mobile phone number and ID number
-+ Remove irrelevant content such as beginning and end, and remove text whose length is less than n (currently nasty 100)
-+ Convert simplified Chinese to traditional Chinese (opencc Library)
+##### QaCleaner
+QaCleaner provides commonly used Qa format text extraction and data cleaning tools.
+Users only need to run the main method to process Qa data.
+For details, see[Instructions for using Qa](flagdata/cleaner/docs/Qa_Cleaner.md)
 
-It takes only two steps to use the data cleaning feature of FlagData:
-
-1. Modify the data path and format in the YAML configuration file. We give detailed comments on each parameter in the
-   configuration file template to explain its meaning. At the same time, you can refer
-   to [Configuration](#Configuration) Chapter.
-
-2. Specify the configuration file path in the following code and run it
-   ```python
-   from flagdata.cleaner.text_cleaner import DataCleaner
-   if __name__ == "__main__": # Safe import of main module in multi-process
-      cleaner = DataCleaner("config.yaml")
-      cleaner.clean()
-   ```
-
-The cleaned file will be saved in the format `jsonl` to the path corresponding to the `output` parameter specified in
-the configuration file.
-
-See [Tutorial 1: Clean the original text obtained from the Internet](/flagdata/cleaner/tutorial_01_cleaner.md) for an
-example.
+##### BookCleaner
+BookCleaner provides a common book format text extraction and data cleaning tool.
+Users only need to run the main method to process the book data.
+For details, see[Instructions for using Book](flagdata/cleaner/docs/Book_Cleaner.md)
 
 #### Quality assessment
 
@@ -182,7 +174,7 @@ This paper compares different text classification models, including logical regr
 their performance. In the experiment, BERTEval and FastText models perform well in text classification tasks, and
 FastText model performs best in terms of accuracy and recall rate. [experimental results are from ChineseWebText]
 
-See [ReadMe under quality_assessment Module](flagdata/quality_assessment/README.md) for an example.
+See [Instructions for using the quality assessment module](flagdata/quality_assessment/README.md) for an example.
 
 #### Data deduplication
 
@@ -196,6 +188,7 @@ to retain only those texts that are very similar, while discard those texts with
 default value is 0.87. At the same time, we use the distributed computing power of Spark to deal with large-scale data,
 the idea of MapReduce is used to remove duplicates, and tuned by spark to deal with large-scale text data sets
 efficiently.
+
 The following is the similar text iterated in the process of data deduplication, which has slight differences in line
 wrapping and name editing, but the deduplication algorithm can identify two paragraphs of text that are highly similar.
 
@@ -253,13 +246,13 @@ The analysis data analysis module provides the following functions:
 
 + length analysis of the text.
 
-See [ReadMe under analysis Module](flagdata/analysis/README.md) for an example.
+See [Instructions for using the analysis module](flagdata/analysis/README.md) for an example.
 
 ## Configuration
 
 For the `data cleansing` and `data quality assessment` modules,
 We provide a profile
-template:[cleaner_config.yaml](https://dorc.baai.ac.cn/resources/projects/FlagData/cleaner_config.yaml)， [bert_config.yaml](flagdata/quality_assessment/Bert/bert_config.yaml)。
+template:[text_clean.yaml、arxiv_clean.yaml](flagData/cleaner/configs)， [bert_config.yaml](flagdata/quality_assessment/Bert/bert_config.yaml)。
 The configuration file is readable [YAML](https://yaml.org) format , provides detailed comments. Please make sure that
 the parameters have been modified in the configuration file before using these modules.
 
@@ -268,10 +261,16 @@ Here are some important parameters you need to pay attention to:
 ### Data cleaning
 
    ```yaml
-   # Raw data to be cleaned
+   # 待清洗的原始数据
    input: ./demo/demo_input.jsonl
-   # Save path of data after cleaning
+   # 清洗后数据的保存路径
    output: ./demo/output.jsonl
+   # 待处理的字段
+   source_key: text
+   # key in the output file for saving
+   result_key: cleanedContent
+   # 需要选择的Pipline类
+   cleaner_class: ArxivCleaner
    ```
 
 ### Data Quality assessment
@@ -283,19 +282,36 @@ Here are some important parameters you need to pay attention to:
    # The text_key field is the field being evaluated
    text_key: "raw_content"
    ```
+## Operator Pool
+We provide some basic operators for data cleaning, filtering, format conversion, etc. to help users build their own data construction process.
 
-## Contact us
+The operators provided are divided into three types: Formatter, Pruner, and Filter. Formatter is used to process structured data and can be used for mutual conversion of data in different formats; Pruner is used to clean text data; Filter is used for sample filtering.
+The figure below shows these operators in different processing locations and a list of some of the operators
 
-If you have any questions about the use and code of this project, you can submit issue. At the same time, you can
-contact us directly through data@baai.ac.cn.
+<img src="pic/data_operator.png" width="50%" height="auto">
 
-An active community is inseparable from your contribution, if you have a new idea, welcome to join our community, let us
-become a part of open source, together to contribute our own efforts for open source!
+<img src="pic/some_operator.png" width="50%" height="auto">
 
+For detailed description, see[Instructions for using the data operator](flagdata/data_operator/Operator_ZH.md)
+
+## Strong community support
+### Community Support
+If you have any questions about the use and code of this project, you can submit an issue. You can also contact us directly via email at data@baai.ac.cn;
+
+An active community cannot be separated from your contribution. If you have a new idea, welcome to join our community, let us become part of open source, and contribute to open source together! ! !
 <img src="contact_me.png" width="50%" height="auto">
 
-Or follow Zhiyuan FlagOpen open source system, FlagOpen official website https://flagopen.baai.ac.cn/
+Or follow the FlagOpen open source system, FlagOpen official website https://flagopen.baai.ac.cn/
 ![contact_me](FlagOpen.png)
+
+### Questions and Feedback
+- Please report issues and make suggestions through GitHub Issues, and we will respond quickly within 24 hours.
+- You are also welcome to discuss actively in GitHub Discussions.
+- If it is inconvenient to use GitHub, of course, everyone in the FlagData open source community can also speak freely. For reasonable suggestions, we will iterate in the next version.
+  We will invite experts in the field to hold online and offline exchanges regularly to share the latest LLM research results.
+## Users
+
+<img src="pic/users.png" width="50%" height="auto">
 
 ## Reference project
 

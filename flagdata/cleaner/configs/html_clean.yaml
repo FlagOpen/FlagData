@@ -1,0 +1,18 @@
+basic:
+  # input file path
+  input: demo_input.jsonl
+  # save file path
+  output: demo_output.jsonl
+  # we support input of jsonl/plain text, if it's text lines, set it to false
+  is_jsonl: true
+  # key in the input file corresponding to the value to extract/clean
+  source_key: rawContent
+  # key in the output file for saving
+  result_key: cleanedContent
+  cleaner_class: HTMLCleaner
+HTMLCleaner:
+  remove_extraspace:
+  remove_fragments:
+
+
+

@@ -1,0 +1,20 @@
+basic:
+  # input file path
+  input: input/book_demo_data
+  # save file path
+  output: output/book_demo_output.jsonl
+  # key in the input file corresponding to the value to extract/clean
+  config_path: book_config.json
+  # key in the output file for saving
+  workspace: input/book_demo_temp
+  # Remove sentences that contain any of the following listed content
+  pattern: [ "@article" ]
+  cleaner_class: BookCleaner
+TextCleaner:
+  drop_docs_exceeding_newline_proportion:
+  drop_doc_below_ratio:
+  end_clip:
+  remove_specific_patterns:
+  remove_control_chars:
+  remove_extraspace:
+  remove_unwanted_lines:

@@ -1,0 +1,14 @@
+basic:
+  # input file path
+  input: input/arxiv_demo_input.jsonl
+  # save file path
+  output: output/arxiv_demo_output.jsonl
+  # we support input of jsonl/plain text, if it's text lines, set it to false
+  is_jsonl: true
+  # key in the input file corresponding to the value to extract/clean
+  source_key: text
+  # key in the output file for saving
+  result_key: cleanedContent
+  cleaner_class: ArxivCleaner
+ArxivCleaner:
+  process_text:

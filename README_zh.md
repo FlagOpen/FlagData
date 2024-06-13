@@ -2,7 +2,6 @@
 
 ![FlagData](flagdata_logo.png)
 [![Pypi Package](https://img.shields.io/pypi/v/flagdata?label=pypi%20package)](https://pypi.org/project/flagdata/)
-[![Python Application](https://github.com/FlagOpen/FlagData/actions/workflows/python-app.yml/badge.svg)](https://github.com/FlagOpen/FlagData/actions/workflows/python-app.yml)
 [![License](https://img.shields.io/github/license/FlagOpen/FlagData.svg?color=blue)](https://github.com/FlagOpen/FlagData/blob/main/LICENSE)
 ![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/FlagOpen/FlagData?include_prereleases&style=social)
 
@@ -25,7 +24,7 @@ FlagData支持以下特性：
 ![pipeline](pipeline_zh.png)
 
 ## 动态
-
+- [June 13st, 2024] FlagData v3.0.0 update，支持多种数据类型，多达几十种算子池供DIY，一键生成高质量数据
 - [Dec 31st, 2023] FlagData v2.0.0 升级
 - [Jan 31st, 2023] FlagData v1.0.0 上线了!
 
@@ -44,9 +43,28 @@ FlagData支持以下特性：
 - [配置](#3配置)
     - [数据清洗](#31数据清洗)
     - [数据质量评估](#32数据质量评估)
-- [联系我们](#4联系我们)
-- [参考项目](#5参考项目)
-- [许可证](#6许可证)
+- [算子池](#4算子池)
+- [强有力的社区支持](#5强有力的社区支持)
+- [使用用户](#6使用用户)
+- [许可证](#7参考项目)
+- [许可证](#8许可证)
+
+# V3.0.0 UPDATE
+  在社区运营的反馈下，FlagData迎来了功能升级。本次更新提供了一套傻瓜式的语言预训练数据构造工具。根据不同的数据类型，我们提供了例如 Html、Text、Book、Arxiv、Qa 等一键式数据质量提升任务。无论是小白用户还是进阶用户都能轻松生成高质量的数据。
+- 小白用户：只需确认数据类型，即可生成高质量数据。
+- 进阶用户：我们提供了几十种算子池，供用户DIY自己的LLM预训练数据构造过程。
+
+**项目特点：**
+
+- 易用性：傻瓜式操作，只需简单配置即可生成高质量数据。
+- 灵活性：进阶用户可通过多种算子池自定义数据构造过程。
+- 多样性：支持多种数据类型（HTML、Web、Wiki、Book、Paper、QA、Redpajama、Code）
+
+**核心亮点**
+
+- 🚀 一键生成高质量数据
+- 🔧 多达几十种算子池供DIY
+- 🌐 支持多种数据类型
 
 ## 1、安装
 
@@ -56,26 +74,12 @@ FlagData支持以下特性：
 pip install -r requirements.txt
 ```
 
-选择性安装FlagData中所需的`cleaner`模块 。你将只会安装对应模块的依赖包，这适合那些只想使用`cleaner`模块且不想安装其他模块依赖包的使用者。
-
-```bash
-pip install flagdata[cleaner]
-```
-
 **安装main分支的最新版本**
 
 main分支为FlagData正式发布的分支，如果你想安装/更新到main分支的最新版本，请使用以下命令：
 
 ```
 git clone https://github.com/FlagOpen/FlagData.git
-pip install .[all]
-```
-
-**基于源码二次开发**
-
-```bash
-git clone https://github.com/FlagOpen/FlagData.git
-pip install -r requirements.txt
 ```
 
 ## 2、快速上手
@@ -89,7 +93,7 @@ pip install -r requirements.txt
 + AbilityExtractionGenerator: 利用LLM接口，归纳出若干案例样本中包含的能力。根据这个能力集合，生成新样本和答案。
 + AbilityDirectGenerator: 根据指定的能力类型，或者任务类型，直接生成与该能力或任务相关的新样本。例如，指定能力为“逻辑推理”，则可生成一系列逻辑推理题目及答案。为增强生成样本的多样性，支持排除已生成样本。
 
-具体示例见[数据增强模块下的readMe](flagdata/data_gen/README_zh.md)
+具体示例见[数据增强模块的使用说明](flagdata/data_gen/README_zh.md)
 
 ### 2.2、数据准备阶段
 
@@ -100,7 +104,7 @@ ListItem【参考文献】", "
 Title【章节标题】", "Address【邮箱地址】","PageBreak", "Header【页眉】", "Footer【页脚】", "UncategorizedText【arxiv竖排编号】", "
 Image(图)", "Formula（公式）" 等，工具脚本提供保留全文，以及按照类别解析保存两种形式。
 
-具体示例见[all2txt模块下的readMe](flagdata/all2txt/README_zh.md)
+具体示例见[all2txt模块的使用说明](flagdata/all2txt/README_zh.md)
 
 ### 2.3、数据预处理阶段
 
@@ -114,40 +118,32 @@ Wikipedia、Tatoeba、SETimes
 + 对于每一个网页做一次语言分类，得到分类的分数。
 + 对于一般清洗规则，如果大于 0.5，那么就分类为某个特定的语言，否则表示不确定是什么语言的网页并丢掉这个网页。
 
-具体示例见[language_identification模块下的readMe](flagdata/language_identification/README_zh.md)
+具体示例见[language_identification模块的使用说明](flagdata/language_identification/README_zh.md)
 
 #### 2.3.2、数据清洗
+我们提供了例如 Html、Text、Book、Arxiv、Qa 等一键式数据质量提升任务。更多自定义的功能部分，用户可以参阅“data_operator”部分。
+##### TextCleaner
+TextCleaner提供了一个快速且可扩展的文本数据清理工具。它提供常用的文本清理模块。
+使用者仅需在cleaner_builder.py选择 text_clean.yaml文件，便可进行text数据的处理。
+具体说明见[TextCleaner 的使用说明](flagdata/cleaner/docs/Text_Cleaner.md)
 
-&emsp;&emsp;cleaner模块，使用多进程池 mp.Pool，通过多进程方式并行处理数据。使用 SharedMemoryManager
-创建可共享的数据结构，在数据处理中多进程共享数据。
+##### ArxivCleaner
+ArxivCleaner提供了常用的arxiv文本数据清理工具。
+使用者仅需在cleaner_builder.py选择 arxiv_clean.yaml文件，便可进行arxiv数据的处理。
 
-&emsp;&emsp;通过多进程和共享内存的方式实现了高效的数据清洗：
+##### HtmlCleaner
+HtmlCleaner提供了常用的Html格式的文本抽取、数据清理工具。
+使用者仅需运行main方法，便可进行arxiv数据的处理。
 
-目前包含如下清洗规则：
+##### QaCleaner
+QaCleaner提供了常用的Qa格式的文本抽取、数据清理工具。
+使用者仅需运行main方法，便可进行Qa数据的处理。
+具体说明见[Qa 的使用说明](flagdata/cleaner/docs/Qa_Cleaner_ZH.md)
 
-+ 表情符号和无意义字符（正则）
-+ 清洗转载版权声明信息（知乎、csdn、简书、博客园）
-+ 去除不合理的连续标点符号，换行符统一为\n
-+ 去除手机号、身份证号等个人隐私、URL和额外的空格
-+ 去除开头、结尾等无关内容，去除长度小于n的文本（目前n=100）
-+ 简体中文转换为繁体中文（opencc库）
-
-使用FlagData的数据清洗功能仅需两步：
-
-1.修改YAML配置文件中的数据路径与格式。我们在配置文件模板中为每个参数给出了详细的注释来解释其含义。同时你也可以参考[配置](#配置)
-章节。
-
-2. 在以下代码中指定配置文件路径，运行即可
-   ```python
-   from flagdata.cleaner.text_cleaner import DataCleaner
-   if __name__ == "__main__": # 多进程中主模块安全导入
-      cleaner = DataCleaner("config.yaml")
-      cleaner.clean()
-   ```
-
-清洗后的文件会以`jsonl`的格式保存到配置文件中指定的`output`参数对应的路径。
-
-具体示例见[Tutorial 1: 清洗从互联网上获取到的原始文本](/flagdata/cleaner/tutorial_01_cleaner.md)
+##### BookCleaner
+BookCleaner提供了常用的Book格式的文本抽取、数据清理工具。
+使用者仅需运行main方法，便可进行Book数据的处理。
+具体说明见[Book 的使用说明](flagdata/cleaner/docs/Book_Cleaner_ZH.md)
 
 #### 2.3.3、质量评估
 
@@ -158,13 +154,14 @@ Wikipedia、Tatoeba、SETimes
 
 文章比较了不同的文本分类模型，包括逻辑回归、BERT和FastText，以评估它们的性能。在实验中，BERTEval和FastText模型在文本分类任务中表现良好，其中FastText模型在精度和召回率方面表现最佳。【实验结果来自ChineseWebText】
 
-具体示例见[quality_assessment模块下的readMe](flagdata/quality_assessment/README_zh.md)
+具体示例见[quality_assessment模块的使用说明](flagdata/quality_assessment/README_zh.md)
 
 #### 2.3.4、数据去重
 
 &emsp;&emsp;deduplication模块下，提供海量文本数据去重能力，该阶段使用的是MinHashLSH（最小哈希局部敏感哈希）通过将文本转换为一系列哈希值，以便比较文本之间的相似性。
 
 &emsp;&emsp;我们可以通过控制参数threshold，它代表了相似性的阈值，threshold值的范围是从0到1。设置为1时意味着完全匹配，任何文本都不会被过滤掉。相反，如果设置了较低的threshold值，相似性稍微高一些的文本也会被保留，我们可以根据需要设置更高的threshold值，以便只保留那些非常相似的文本，而丢弃那些相似性稍微低一些的文本，经验默认值为0.87；同时我们利用了Spark的分布式计算能力处理大规模数据，使用了MapReduce思想来实现去重，同时经spark调优，来高效地处理大规模文本数据集。
+
 如下是在数据去重过程中迭代计算的相似文本，该文本在换行、编辑姓名等方面有细微区别，但是去重算法可以识别出两段文本高度相似。
 
 ```json lines
@@ -196,7 +193,9 @@ Spark 的原生算子来进行处理。
 deduplication模块下提供了普通Python函数（判断是否是其他字符串的子字符串）使用spark
 udf的改写，可以方便的使用spark分布式能力，详细请见`stringMatching.py`和`udf_spark_stringMatching.py`的对比
 
-如果用户只是单单将python函数改成spark任务，如果没有spark集群是不行的。这里详细的写了傻瓜式搭建集群的文档，方便小白用户使用。具体示例见[spark集群搭建](flagdata/deduplication/README_zh.md)
+如果用户只是单单将python函数改成spark任务，如果没有spark集群是不行的。这里详细的写了傻瓜式搭建集群的文档，方便小白用户使用。
+
+具体示例见[spark集群搭建](flagdata/deduplication/README_zh.md)
 
 ### 2.4、数据分析阶段
 
@@ -209,12 +208,12 @@ analysis数据分析模块提供如下功能：
 
 （4）文本的长度分析
 
-具体详细示例见[analysis模块下的readMe](flagdata/analysis/README_zh.md)
+具体详细示例见[analysis模块的使用说明](flagdata/analysis/README_zh.md)
 
 ## 3、配置
 
 针对`数据清洗`、`数据质量评估`模块，
-我们提供了配置文件模板：[cleaner_config.yaml](https://dorc.baai.ac.cn/resources/projects/FlagData/cleaner_config.yaml)， [bert_config.yaml](flagdata/quality_assessment/Bert/bert_config.yaml)。
+我们提供了配置文件模板：[text_clean.yaml、arxiv_clean.yaml](flagData/cleaner/configs)， [bert_config.yaml](flagdata/quality_assessment/Bert/bert_config.yaml)。
 配置文件为易读的 [YAML](https://yaml.org) 格式，并提供了详尽的注释。使用这些模块前请确认已经在配置文件中修改好相应参数。
 
 以下是一些你需要注意的重要参数：
@@ -226,6 +225,12 @@ analysis数据分析模块提供如下功能：
    input: ./demo/demo_input.jsonl
    # 清洗后数据的保存路径
    output: ./demo/output.jsonl
+   # 待处理的字段
+   source_key: text
+   # key in the output file for saving
+   result_key: cleanedContent
+   # 需要选择的Pipline类
+   cleaner_class: ArxivCleaner
    ```
 
 ### 3.2、数据质量评估
@@ -238,28 +243,50 @@ analysis数据分析模块提供如下功能：
    text_key: "raw_content"
    ```
 
-## 4、联系我们
+## 4、算子池
+我们提供了一些用于数据清洗，过滤，格式转换等的基本算子，帮助用户构建自己的数据构建流程。
 
+提供的算子分为三种：Formatter、Pruner、Filter。Formatter用于处理结构化数据，可以用于不同格式数据的相互转换；Pruner用于清洗文本数据；Filter用于样本过滤。
+下图是这些算子位于不同的处理位置以及其中一些operator的列表
+
+<img src="pic/data_operator.png" width="50%" height="auto">
+
+<img src="pic/some_operator.png" width="50%" height="auto">
+
+具体详细说明见[data_operator的使用说明](flagdata/data_operator/Operator_ZH.md)
+
+## 5、强有力的社区支持
+### 社区支持
 如果你对本项目的使用和代码有任何问题，可以提交issue。同时你也可以通过邮箱 data@baai.ac.cn 直接联系我们；
 
 一个活跃的社区离不开你的贡献，如果你有新的idea，欢迎加入我们的社区，让我们成为开源的一部分，一起为开源贡献自己的力量！！！
+
 <img src="contact_me.png" width="50%" height="auto">
 
 或者关注智源 FlagOpen 开源体系，FlagOpen 官网 https://flagopen.baai.ac.cn/
 ![contact_me](FlagOpen.png)
 
-## 5、参考项目
+### 问题和反馈
+- 请通过GitHub Issues 来反馈问题和提出建议，我们将在24h内快速响应。
+- 同时也欢迎大家在GitHub Discussions积极讨论。
+- 如果不方便使用GitHub ，当然FlagData开源社区大家也可以畅所欲言，对于合理的建议，我们会在下一个版本中进行迭代。
+- 我们会邀请领域专家 定期举办线上、线下交流会 分享最新的LLM的研究成果。
+## 6、使用用户
+
+<img src="pic/users.png" width="50%" height="auto">
+
+## 7、参考项目
 
 本项目部分参考自以下代码：
-[GeneralNewsExtractor](https://github.com/GeneralNewsExtractor/GeneralNewsExtractor),
-[text-data-distillation](https://github.com/arumaekawa/text-dataset-distillation),
-[emoji](https://github.com/carpedm20/emoji),
-[transformers](https://github.com/huggingface/transformers)。
+[GeneralNewsExtractor](https://github.com/GeneralNewsExtractor/GeneralNewsExtractor)
+[text-data-distillation](https://github.com/arumaekawa/text-dataset-distillation)
+[emoji](https://github.com/carpedm20/emoji)
+[transformers](https://github.com/huggingface/transformers)
 [ChineseWebText](https://github.com/CASIA-LM/ChineseWebText)
 [lid](https://github.com/facebookresearch/cc_net)
 [unstructured](https://github.com/Unstructured-IO/unstructured)
 [minHash](https://github.com/ChenghaoMou/text-dedup)
 
-## 6、许可证
+## 8、许可证
 
 FlagData项目基于 [Apache 2.0 协议](LICENSE)。

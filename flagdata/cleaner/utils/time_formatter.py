@@ -4,6 +4,8 @@
 import re
 import time
 import datetime
+import signal
+from functools import wraps
 
 
 def year_now():
@@ -150,7 +152,8 @@ def return_format_datetime(date_strs):
                     sp_strs_list = date_strs.split(',')[0].split('/')
                     if len(sp_strs_list[-1]) > 2:
                         public_time = return_format_datetime(
-                            sp_strs_list[-1] + '-' + sp_strs_list[0] + '-' + sp_strs_list[1] + ' ' + date_strs.split(',')[1].replace('PM', '').replace('AM', ''))
+                            sp_strs_list[-1] + '-' + sp_strs_list[0] + '-' + sp_strs_list[1] + ' ' +
+                            date_strs.split(',')[1].replace('PM', '').replace('AM', ''))
                     else:
                         public_time = date_strs
                 except:
@@ -160,7 +163,8 @@ def return_format_datetime(date_strs):
                     sp_strs_list = date_strs.split(' ')[0].split('/')
                     if len(sp_strs_list[-1]) > 2:
                         public_time = return_format_datetime(
-                            sp_strs_list[-1] + '-' + sp_strs_list[0] + '-' + sp_strs_list[1] + ' ' + date_strs.split(' ')[1].replace('PM', '').replace('AM', ''))
+                            sp_strs_list[-1] + '-' + sp_strs_list[0] + '-' + sp_strs_list[1] + ' ' +
+                            date_strs.split(' ')[1].replace('PM', '').replace('AM', ''))
                     else:
                         public_time = date_strs
                 except:
@@ -199,14 +203,16 @@ def return_format_datetime(date_strs):
                             elif '昨天' in mid_str:
                                 all_stamp = 86399
                                 public_time = return_format_datetime(return_stand(
-                                    (return_now_stamp() - all_stamp)).split(' ')[0] + ' ' + date_strs.split('昨天')[1].strip())
+                                    (return_now_stamp() - all_stamp)).split(' ')[0] + ' ' + date_strs.split('昨天')[
+                                                                         1].strip())
                                 if public_time == '':
                                     public_time = return_format_datetime(
                                         int(return_stand(return_now_stamp()) - all_stamp))
                             elif '前天' in mid_str:
                                 all_stamp = 2 * 86399
                                 public_time = return_format_datetime(return_stand(
-                                    (return_now_stamp() - all_stamp)).split(' ')[0] + ' ' + date_strs.split('前天')[1].strip())
+                                    (return_now_stamp() - all_stamp)).split(' ')[0] + ' ' + date_strs.split('前天')[
+                                                                         1].strip())
                                 if public_time == '':
                                     public_time = return_format_datetime(
                                         int(return_stand(return_now_stamp()) - all_stamp))
@@ -267,7 +273,8 @@ def return_format_datetime(date_strs):
                 public_time_ok_split = public_time_ok.split('-')
                 if int(public_time_ok_split[0]) > int(year_now()):
                     need_check_times = (year_now()[:2] + public_time_ok_split[2].split(' ')[
-                                        0] + '-' + public_time_ok_split[1] + '-' + public_time_ok_split[0][2:] + ' ' + public_time_ok_split[2].split(' ')[1])
+                        0] + '-' + public_time_ok_split[1] + '-' + public_time_ok_split[0][2:] + ' ' +
+                                        public_time_ok_split[2].split(' ')[1])
                 else:
                     need_check_times = public_time_ok.replace('Z', '').strip()
             except:
@@ -299,3 +306,28 @@ def return_format_datetime(date_strs):
                 return need_check_times_ok
             else:
                 return ''
+
+
+class TimeoutException(Exception):
+    """timeout exception"""
+    pass
+
+
+def timeout(seconds, error_message="Function call timed out"):
+    def decorator(func):
+        def _handle_timeout(signum, frame):
+            raise TimeoutException(error_message)
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            signal.signal(signal.SIGALRM, _handle_timeout)
+            signal.alarm(seconds)
+            try:
+                result = func(*args, **kwargs)
+            finally:
+                signal.alarm(0)
+            return result
+
+        return wrapper
+
+    return decorator
